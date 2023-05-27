@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <!-- 设置字符编码风格 -->
+    <meta charset="utf-8">             
+    <!-- 针对手机浏览器的自适应窗口 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>CLS</title>
+  </head>
+  <!-- <body style="background-color:#000000;"> -->
+  <body>
+    <!-- 设置导航条 -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" style="background-color: #000000;">
+        <a class="navbar-brand" href="#">CPU_TMICM 医学图像分类平台</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav ml-auto">
+            <a class="nav-item nav-link active" href="logout">退出 <span class="sr-only">(current)</span></a>
+            <!-- <a class="nav-item nav-link" href="#" onclick="sendAlert()">Prediction</a> -->
+            
+          </div>
+        </div>
+      </nav>
+
+
+
+      <!-- <div class="container" style=" background-color: aqua; display: inline;"> -->
+      <div class="container" style=" margin-bottom: 10px; background-color: rgb(255, 255, 255); display: inline;">
+        <!-- <div class = "col-6" style="padding-top: 15px; padding-left: 70px; margin-bottom: 60px;"> -->
+        <div class="row" style="background-color:#ffffff; ">
+
+          <div class="col-6" style="padding-top: 50px; padding-left: 85px; margin-bottom: 60px; float: left; background-color: rgb(255, 255, 255);">
+            <form action="" method="post" enctype="multipart/form-data" >
+              <div class="form-group">
+                <!-- <label for="id_myfile">Choose an image from your computer</label><br> -->
+                <input type="file" class="form-control-file btn btn-primary" style="background-color: #000000; border: 1px solid #161896; width: min-content; color: #f00859;" name="file" id="id_myfile">
+              </div>
+
+              <input type="submit" name="button1" class="btn btn-primary" style="background-color: #000000; border: 1px solid #0d0211;" value="运行模型" >
+            </form>
+            <div style="width: 100%;">
+              <label for="id_myfile" style="width:100%;">
+              <img src="" alt=""  width="85%" height="auto" class="img-responsive" id="id_img" style="float:left; padding-top: 50px;" >
+              </label>
+            </div>
+          </div>
+
+          <div class="col-6" style="padding-top: 50px; padding-left: 8px; padding-right: 85px;margin-bottom: 60px;float: right; background-color:#ffffff";>
+
+            <div class="card text-left">
+              <div class="card-body">
+                <h5 class="card-title">{{prediction[0]}}</h5>
+                <p class="card-text">{{prediction[1]}}</p>
+              </div>
+            </div>
+            
+            
+            {% if show_email %}
+              <br>
+              <form action="" method="post" enctype="multipart/form-data" >
+                <label for="content">邮件内容：</label>
+                <textarea name="content" id="content" rows="4" cols="117" placeholder="亲，请您填写邮件内容..." required>{{prediction[3]}}</textarea>
+                <br><br>
+                <input type="submit" name="button2" class="btn btn-primary" style="background-color: #000000; border: 1px solid #0d0211;" value="发送邮件" >
+              </form>
+            {% endif %}
+
+            <div style="width: 100%;">
+              <label for="yuce" style="width:80%;"></label>
+              <img src="{{url_for('static', filename=prediction[2])}}" alt=""  width="85%" height="auto" class="img-responsive" id="id_img" style="padding-top: 10px;" >
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script>
+      function sendAlert(){
+        alert("Add an image and click Predict Breed to see prediction");
+      }
+      
+    </script>
+
+    <script>
+      $('#id_myfile').change(function () {
+    // 先获取用户上传的文件对象
+    let fileObj = this.files[0];
+    // 生成一个文件读取的内置对象
+    let fileReader = new FileReader();
+    // 将文件对象传递给内置对象
+    fileReader.readAsDataURL(fileObj); //这是一个异步执行的过程，所以需要onload回调函数执行读取数据后的操作
+    // 将读取出文件对象替换到img标签
+    fileReader.onload = function(){  // 等待文件阅读器读取完毕再渲染图片
+        $('#id_img').attr('src',fileReader.result)
+    }
+    });
+    </script>
+  </body>
+</html>
