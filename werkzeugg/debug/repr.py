@@ -81,7 +81,7 @@ helper = _Helper()
 
 
 def _add_subclass_info(
-    inner: str, obj: object, base: t.Union[t.Type, t.Tuple[t.Type, ...]]
+        inner: str, obj: object, base: t.Union[t.Type, t.Tuple[t.Type, ...]]
 ) -> str:
     if isinstance(base, tuple):
         for cls in base:
@@ -96,7 +96,7 @@ def _add_subclass_info(
 
 
 def _sequence_repr_maker(
-    left: str, right: str, base: t.Type, limit: int = 8
+        left: str, right: str, base: t.Type, limit: int = 8
 ) -> t.Callable[["DebugReprGenerator", t.Iterable, bool], str]:
     def proxy(self: "DebugReprGenerator", obj: t.Iterable, recursive: bool) -> str:
         if recursive:
@@ -164,10 +164,10 @@ class DebugReprGenerator:
         return out
 
     def dict_repr(
-        self,
-        d: t.Union[t.Dict[int, None], t.Dict[str, int], t.Dict[t.Union[str, int], int]],
-        recursive: bool,
-        limit: int = 5,
+            self,
+            d: t.Union[t.Dict[int, None], t.Dict[str, int], t.Dict[t.Union[str, int], int]],
+            recursive: bool,
+            limit: int = 5,
     ) -> str:
         if recursive:
             return _add_subclass_info("{...}", d, dict)
@@ -189,7 +189,7 @@ class DebugReprGenerator:
         return _add_subclass_info("".join(buf), d, dict)
 
     def object_repr(
-        self, obj: t.Optional[t.Union[t.Type[dict], t.Callable, t.Type[list]]]
+            self, obj: t.Optional[t.Union[t.Type[dict], t.Callable, t.Type[list]]]
     ) -> str:
         r = repr(obj)
         return f'<span class="object">{escape(r)}</span>'
@@ -271,7 +271,7 @@ class DebugReprGenerator:
         return self.render_object_dump(items, "Local variables in frame")
 
     def render_object_dump(
-        self, items: t.List[t.Tuple[str, str]], title: str, repr: t.Optional[str] = None
+            self, items: t.List[t.Tuple[str, str]], title: str, repr: t.Optional[str] = None
     ) -> str:
         html_items = []
         for key, value in items:

@@ -50,7 +50,7 @@ class Local:
     __slots__ = ("__storage",)
 
     def __init__(
-        self, context_var: t.Optional[ContextVar[t.Dict[str, t.Any]]] = None
+            self, context_var: t.Optional[ContextVar[t.Dict[str, t.Any]]] = None
     ) -> None:
         if context_var is None:
             # A ContextVar not created at global scope interferes with
@@ -65,7 +65,7 @@ class Local:
         return iter(self.__storage.get({}).items())
 
     def __call__(
-        self, name: str, *, unbound_message: t.Optional[str] = None
+            self, name: str, *, unbound_message: t.Optional[str] = None
     ) -> "LocalProxy":
         """Create a :class:`LocalProxy` that access an attribute on this
         local namespace.
@@ -170,7 +170,7 @@ class LocalStack(t.Generic[T]):
         return stack[-1]
 
     def __call__(
-        self, name: t.Optional[str] = None, *, unbound_message: t.Optional[str] = None
+            self, name: t.Optional[str] = None, *, unbound_message: t.Optional[str] = None
     ) -> "LocalProxy":
         """Create a :class:`LocalProxy` that accesses the top of this
         local stack.
@@ -207,10 +207,10 @@ class LocalManager:
     __slots__ = ("locals",)
 
     def __init__(
-        self,
-        locals: t.Optional[
-            t.Union[Local, LocalStack, t.Iterable[t.Union[Local, LocalStack]]]
-        ] = None,
+            self,
+            locals: t.Optional[
+                t.Union[Local, LocalStack, t.Iterable[t.Union[Local, LocalStack]]]
+            ] = None,
     ) -> None:
         if locals is None:
             self.locals = []
@@ -232,7 +232,7 @@ class LocalManager:
         """
 
         def application(
-            environ: "WSGIEnvironment", start_response: "StartResponse"
+                environ: "WSGIEnvironment", start_response: "StartResponse"
         ) -> t.Iterable[bytes]:
             return ClosingIterator(app(environ, start_response), self.cleanup)
 
@@ -273,11 +273,11 @@ class _ProxyLookup:
     __slots__ = ("bind_f", "fallback", "is_attr", "class_value", "name")
 
     def __init__(
-        self,
-        f: t.Optional[t.Callable] = None,
-        fallback: t.Optional[t.Callable] = None,
-        class_value: t.Optional[t.Any] = None,
-        is_attr: bool = False,
+            self,
+            f: t.Optional[t.Callable] = None,
+            fallback: t.Optional[t.Callable] = None,
+            class_value: t.Optional[t.Any] = None,
+            is_attr: bool = False,
     ) -> None:
         bind_f: t.Optional[t.Callable[["LocalProxy", t.Any], t.Callable]]
 
@@ -352,7 +352,7 @@ class _ProxyIOp(_ProxyLookup):
     __slots__ = ()
 
     def __init__(
-        self, f: t.Optional[t.Callable] = None, fallback: t.Optional[t.Callable] = None
+            self, f: t.Optional[t.Callable] = None, fallback: t.Optional[t.Callable] = None
     ) -> None:
         super().__init__(f, fallback)
 
@@ -470,11 +470,11 @@ class LocalProxy(t.Generic[T]):
     """
 
     def __init__(
-        self,
-        local: t.Union[ContextVar[T], Local, LocalStack[T], t.Callable[[], T]],
-        name: t.Optional[str] = None,
-        *,
-        unbound_message: t.Optional[str] = None,
+            self,
+            local: t.Union[ContextVar[T], Local, LocalStack[T], t.Callable[[], T]],
+            name: t.Optional[str] = None,
+            *,
+            unbound_message: t.Optional[str] = None,
     ) -> None:
         if name is None:
             get_name = _identity

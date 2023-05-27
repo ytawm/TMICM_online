@@ -58,7 +58,7 @@ def _hash_internal(method: str, salt: str, password: str) -> t.Tuple[str, str]:
 
 
 def generate_password_hash(
-    password: str, method: str = "pbkdf2:sha256", salt_length: int = 16
+        password: str, method: str = "pbkdf2:sha256", salt_length: int = 16
 ) -> str:
     """Hash a password with the given method and salt with a string of
     the given length. The format of the string returned includes the method
@@ -128,10 +128,10 @@ def safe_join(directory: str, *pathnames: str) -> t.Optional[str]:
             filename = posixpath.normpath(filename)
 
         if (
-            any(sep in filename for sep in _os_alt_seps)
-            or os.path.isabs(filename)
-            or filename == ".."
-            or filename.startswith("../")
+                any(sep in filename for sep in _os_alt_seps)
+                or os.path.isabs(filename)
+                or filename == ".."
+                or filename.startswith("../")
         ):
             return None
 

@@ -36,9 +36,9 @@ class RequestRedirect(HTTPException, RoutingException):
         self.new_url = new_url
 
     def get_response(
-        self,
-        environ: t.Optional[t.Union["WSGIEnvironment", "Request"]] = None,
-        scope: t.Optional[dict] = None,
+            self,
+            environ: t.Optional[t.Union["WSGIEnvironment", "Request"]] = None,
+            scope: t.Optional[dict] = None,
     ) -> "Response":
         return redirect(self.new_url, self.code)
 
@@ -68,11 +68,11 @@ class BuildError(RoutingException, LookupError):
     """
 
     def __init__(
-        self,
-        endpoint: str,
-        values: t.Mapping[str, t.Any],
-        method: t.Optional[str],
-        adapter: t.Optional["MapAdapter"] = None,
+            self,
+            endpoint: str,
+            values: t.Mapping[str, t.Any],
+            method: t.Optional[str],
+            adapter: t.Optional["MapAdapter"] = None,
     ) -> None:
         super().__init__(endpoint, values, method)
         self.endpoint = endpoint
@@ -112,9 +112,9 @@ class BuildError(RoutingException, LookupError):
         if self.suggested:
             if self.endpoint == self.suggested.endpoint:
                 if (
-                    self.method
-                    and self.suggested.methods is not None
-                    and self.method not in self.suggested.methods
+                        self.method
+                        and self.suggested.methods is not None
+                        and self.method not in self.suggested.methods
                 ):
                     message.append(
                         " Did you mean to use methods"

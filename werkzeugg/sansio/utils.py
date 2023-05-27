@@ -54,10 +54,10 @@ def host_is_trusted(hostname: str, trusted_list: t.Iterable[str]) -> bool:
 
 
 def get_host(
-    scheme: str,
-    host_header: t.Optional[str],
-    server: t.Optional[t.Tuple[str, t.Optional[int]]] = None,
-    trusted_hosts: t.Optional[t.Iterable[str]] = None,
+        scheme: str,
+        host_header: t.Optional[str],
+        server: t.Optional[t.Tuple[str, t.Optional[int]]] = None,
+        trusted_hosts: t.Optional[t.Iterable[str]] = None,
 ) -> str:
     """Return the host for the given parameters.
 
@@ -102,11 +102,11 @@ def get_host(
 
 
 def get_current_url(
-    scheme: str,
-    host: str,
-    root_path: t.Optional[str] = None,
-    path: t.Optional[str] = None,
-    query_string: t.Optional[bytes] = None,
+        scheme: str,
+        host: str,
+        root_path: t.Optional[str] = None,
+        path: t.Optional[str] = None,
+        query_string: t.Optional[bytes] = None,
 ) -> str:
     """Recreate the URL for a request. If an optional part isn't
     provided, it and subsequent parts are not included in the URL.
@@ -143,8 +143,8 @@ def get_current_url(
 
 
 def get_content_length(
-    http_content_length: t.Union[str, None] = None,
-    http_transfer_encoding: t.Union[str, None] = "",
+        http_content_length: t.Union[str, None] = None,
+        http_transfer_encoding: t.Union[str, None] = "",
 ) -> t.Optional[int]:
     """Returns the content length as an integer or ``None`` if
     unavailable or chunked transfer encoding is used.

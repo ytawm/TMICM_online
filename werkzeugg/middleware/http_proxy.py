@@ -77,11 +77,11 @@ class ProxyMiddleware:
     """
 
     def __init__(
-        self,
-        app: "WSGIApplication",
-        targets: t.Mapping[str, t.Dict[str, t.Any]],
-        chunk_size: int = 2 << 13,
-        timeout: int = 10,
+            self,
+            app: "WSGIApplication",
+            targets: t.Mapping[str, t.Dict[str, t.Any]],
+            chunk_size: int = 2 << 13,
+            timeout: int = 10,
     ) -> None:
         def _set_defaults(opts: t.Dict[str, t.Any]) -> t.Dict[str, t.Any]:
             opts.setdefault("remove_prefix", False)
@@ -98,20 +98,20 @@ class ProxyMiddleware:
         self.timeout = timeout
 
     def proxy_to(
-        self, opts: t.Dict[str, t.Any], path: str, prefix: str
+            self, opts: t.Dict[str, t.Any], path: str, prefix: str
     ) -> "WSGIApplication":
         target = url_parse(opts["target"])
         host = t.cast(str, target.ascii_host)
 
         def application(
-            environ: "WSGIEnvironment", start_response: "StartResponse"
+                environ: "WSGIEnvironment", start_response: "StartResponse"
         ) -> t.Iterable[bytes]:
             headers = list(EnvironHeaders(environ).items())
             headers[:] = [
                 (k, v)
                 for k, v in headers
                 if not is_hop_by_hop_header(k)
-                and k.lower() not in ("content-length", "host")
+                   and k.lower() not in ("content-length", "host")
             ]
             headers.append(("Connection", "close"))
 
@@ -126,7 +126,7 @@ class ProxyMiddleware:
             remote_path = path
 
             if opts["remove_prefix"]:
-                remote_path = remote_path[len(prefix) :].lstrip("/")
+                remote_path = remote_path[len(prefix):].lstrip("/")
                 remote_path = f"{target.path.rstrip('/')}/{remote_path}"
 
             content_length = environ.get("CONTENT_LENGTH")
@@ -217,7 +217,7 @@ class ProxyMiddleware:
         return application
 
     def __call__(
-        self, environ: "WSGIEnvironment", start_response: "StartResponse"
+            self, environ: "WSGIEnvironment", start_response: "StartResponse"
     ) -> t.Iterable[bytes]:
         path = environ["PATH_INFO"]
         app = self.app

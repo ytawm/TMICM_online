@@ -49,15 +49,15 @@ class DispatcherMiddleware:
     """
 
     def __init__(
-        self,
-        app: "WSGIApplication",
-        mounts: t.Optional[t.Dict[str, "WSGIApplication"]] = None,
+            self,
+            app: "WSGIApplication",
+            mounts: t.Optional[t.Dict[str, "WSGIApplication"]] = None,
     ) -> None:
         self.app = app
         self.mounts = mounts or {}
 
     def __call__(
-        self, environ: "WSGIEnvironment", start_response: "StartResponse"
+            self, environ: "WSGIEnvironment", start_response: "StartResponse"
     ) -> t.Iterable[bytes]:
         script = environ.get("PATH_INFO", "")
         path_info = ""

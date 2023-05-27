@@ -93,7 +93,7 @@ _default_encoding = sys.getdefaultencoding()
 
 
 def _to_bytes(
-    x: t.Union[str, bytes], charset: str = _default_encoding, errors: str = "strict"
+        x: t.Union[str, bytes], charset: str = _default_encoding, errors: str = "strict"
 ) -> bytes:
     if x is None or isinstance(x, bytes):
         return x
@@ -109,29 +109,29 @@ def _to_bytes(
 
 @typing.overload
 def _to_str(  # type: ignore
-    x: None,
-    charset: t.Optional[str] = ...,
-    errors: str = ...,
-    allow_none_charset: bool = ...,
+        x: None,
+        charset: t.Optional[str] = ...,
+        errors: str = ...,
+        allow_none_charset: bool = ...,
 ) -> None:
     ...
 
 
 @typing.overload
 def _to_str(
-    x: t.Any,
-    charset: t.Optional[str] = ...,
-    errors: str = ...,
-    allow_none_charset: bool = ...,
+        x: t.Any,
+        charset: t.Optional[str] = ...,
+        errors: str = ...,
+        allow_none_charset: bool = ...,
 ) -> str:
     ...
 
 
 def _to_str(
-    x: t.Optional[t.Any],
-    charset: t.Optional[str] = _default_encoding,
-    errors: str = "strict",
-    allow_none_charset: bool = False,
+        x: t.Optional[t.Any],
+        charset: t.Optional[str] = _default_encoding,
+        errors: str = "strict",
+        allow_none_charset: bool = False,
 ) -> t.Optional[t.Union[str, bytes]]:
     if x is None or isinstance(x, str):
         return x
@@ -147,13 +147,13 @@ def _to_str(
 
 
 def _wsgi_decoding_dance(
-    s: str, charset: str = "utf-8", errors: str = "replace"
+        s: str, charset: str = "utf-8", errors: str = "replace"
 ) -> str:
     return s.encode("latin1").decode(charset, errors)
 
 
 def _wsgi_encoding_dance(
-    s: str, charset: str = "utf-8", errors: str = "replace"
+        s: str, charset: str = "utf-8", errors: str = "replace"
 ) -> str:
     if isinstance(s, bytes):
         return s.decode("latin1", errors)
@@ -255,13 +255,13 @@ class _DictAccessorProperty(t.Generic[_TAccessorValue]):
     read_only = False
 
     def __init__(
-        self,
-        name: str,
-        default: t.Optional[_TAccessorValue] = None,
-        load_func: t.Optional[t.Callable[[str], _TAccessorValue]] = None,
-        dump_func: t.Optional[t.Callable[[_TAccessorValue], str]] = None,
-        read_only: t.Optional[bool] = None,
-        doc: t.Optional[str] = None,
+            self,
+            name: str,
+            default: t.Optional[_TAccessorValue] = None,
+            load_func: t.Optional[t.Callable[[str], _TAccessorValue]] = None,
+            dump_func: t.Optional[t.Callable[[_TAccessorValue], str]] = None,
+            read_only: t.Optional[bool] = None,
+            doc: t.Optional[str] = None,
     ) -> None:
         self.name = name
         self.default = default
@@ -276,7 +276,7 @@ class _DictAccessorProperty(t.Generic[_TAccessorValue]):
 
     @typing.overload
     def __get__(
-        self, instance: None, owner: type
+            self, instance: None, owner: type
     ) -> "_DictAccessorProperty[_TAccessorValue]":
         ...
 
@@ -285,7 +285,7 @@ class _DictAccessorProperty(t.Generic[_TAccessorValue]):
         ...
 
     def __get__(
-        self, instance: t.Optional[t.Any], owner: type
+            self, instance: t.Optional[t.Any], owner: type
     ) -> t.Union[_TAccessorValue, "_DictAccessorProperty[_TAccessorValue]"]:
         if instance is None:
             return self
@@ -368,11 +368,11 @@ def _cookie_unquote(b: bytes) -> bytes:
             k = q_match.start(0)
         if q_match and (not o_match or k < j):
             _push(b[i:k])
-            _push(b[k + 1 : k + 2])
+            _push(b[k + 1: k + 2])
             i = k + 2
         else:
             _push(b[i:j])
-            rv.append(int(b[j + 1 : j + 4], 8))
+            rv.append(int(b[j + 1: j + 4], 8))
             i = j + 4
 
     return bytes(rv)
@@ -473,7 +473,7 @@ def _easteregg(app: t.Optional["WSGIApplication"] = None) -> "WSGIApplication":
         [
             x + (77 - len(x)) * " "
             for x in bzzzzzzz(
-                b"""
+            b"""
 eJyFlzuOJDkMRP06xRjymKgDJCDQStBYT8BCgK4gTwfQ2fcFs2a2FzvZk+hvlcRvRJD148efHt9m
 9Xz94dRY5hGt1nrYcXx7us9qlcP9HHNh28rz8dZj+q4rynVFFPdlY4zH873NKCexrDM6zxxRymzz
 4QIxzK4bth1PV7+uHn6WXZ5C4ka/+prFzx3zWLMHAVZb8RRUxtFXI5DTQ2n3Hi2sNI+HK43AOWSY
@@ -505,15 +505,15 @@ krEDuNoJCHNlZYhKpvw4mspVWxqo415n8cD62N9+EfHrAvqQnINStetek7RY2Urv8nxsnGaZfRr/
 nhXbJ6m/yl1LzYqscDZA9QHLNbdaSTTr+kFg3bC0iYbX/eQy0Bv3h4B50/SGYzKAXkCeOLI3bcAt
 mj2Z/FM1vQWgDynsRwNvrWnJHlespkrp8+vO1jNaibm+PhqXPPv30YwDZ6jApe3wUjFQobghvW9p
 7f2zLkGNv8b191cD/3vs9Q833z8t"""
-            ).splitlines()
+        ).splitlines()
         ]
     )
 
     def easteregged(
-        environ: "WSGIEnvironment", start_response: "StartResponse"
+            environ: "WSGIEnvironment", start_response: "StartResponse"
     ) -> t.Iterable[bytes]:
         def injecting_start_response(
-            status: str, headers: t.List[t.Tuple[str, str]], exc_info: t.Any = None
+                status: str, headers: t.List[t.Tuple[str, str]], exc_info: t.Any = None
         ) -> t.Callable[[bytes], t.Any]:
             headers.append(("X-Powered-By", "Werkzeug"))
             return start_response(status, headers, exc_info)

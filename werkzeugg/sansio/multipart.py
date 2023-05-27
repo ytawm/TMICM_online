@@ -1,11 +1,11 @@
 import re
 from dataclasses import dataclass
-from enum import auto
 from enum import Enum
-from typing import cast
+from enum import auto
 from typing import List
 from typing import Optional
 from typing import Tuple
+from typing import cast
 
 from .._internal import _to_bytes
 from .._internal import _to_str
@@ -84,9 +84,9 @@ class MultipartDecoder:
     """
 
     def __init__(
-        self,
-        boundary: bytes,
-        max_form_memory_size: Optional[int] = None,
+            self,
+            boundary: bytes,
+            max_form_memory_size: Optional[int] = None,
     ) -> None:
         self.buffer = bytearray()
         self.complete = False
@@ -135,8 +135,8 @@ class MultipartDecoder:
         if data is None:
             self.complete = True
         elif (
-            self.max_form_memory_size is not None
-            and len(self.buffer) + len(data) > self.max_form_memory_size
+                self.max_form_memory_size is not None
+                and len(self.buffer) + len(data) > self.max_form_memory_size
         ):
             raise RequestEntityTooLarge()
         else:

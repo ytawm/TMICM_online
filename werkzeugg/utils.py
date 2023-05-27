@@ -13,8 +13,8 @@ from zlib import adler32
 from markupsafe import escape
 
 from ._internal import _DictAccessorProperty
-from ._internal import _missing
 from ._internal import _TAccessorValue
+from ._internal import _missing
 from .datastructures import Headers
 from .exceptions import NotFound
 from .exceptions import RequestedRangeNotSatisfiable
@@ -78,10 +78,10 @@ class cached_property(property, t.Generic[_T]):
     """
 
     def __init__(
-        self,
-        fget: t.Callable[[t.Any], _T],
-        name: t.Optional[str] = None,
-        doc: t.Optional[str] = None,
+            self,
+            fget: t.Callable[[t.Any], _T],
+            name: t.Optional[str] = None,
+            doc: t.Optional[str] = None,
     ) -> None:
         super().__init__(fget, doc=doc)
         self.__name__ = name or fget.__name__
@@ -185,9 +185,9 @@ def get_content_type(mimetype: str, charset: str) -> str:
         ``application/javascript`` are also given charsets.
     """
     if (
-        mimetype.startswith("text/")
-        or mimetype in _charset_mimetypes
-        or mimetype.endswith("+xml")
+            mimetype.startswith("text/")
+            or mimetype in _charset_mimetypes
+            or mimetype.endswith("+xml")
     ):
         mimetype += f"; charset={charset}"
 
@@ -222,7 +222,7 @@ def get_content_type(mimetype: str, charset: str) -> str:
 #     filename = unicodedata.normalize("NFKD", filename)
 #     # filename = filename.encode("ascii", "ignore").decode("ascii")
 #     filename = filename.encode("utf8", "ignore").decode("utf8")   # 编码格式改变
- 
+
 
 #     for sep in os.path.sep, os.path.altsep:
 #         if sep:
@@ -269,29 +269,29 @@ def secure_filename(filename: str) -> str:
     :param filename: the filename to secure
     """
     filename = unicodedata.normalize("NFKD", filename)
-    filename = filename.encode("utf8", "ignore").decode("utf8")   # 编码格式改变
- 
+    filename = filename.encode("utf8", "ignore").decode("utf8")  # 编码格式改变
+
     for sep in os.path.sep, os.path.altsep:
         if sep:
             filename = filename.replace(sep, " ")
     _filename_ascii_add_strip_re = re.compile(r'[^A-Za-z0-9_\u4E00-\u9FBF\u3040-\u30FF\u31F0-\u31FF.-]')
-    filename = str(_filename_ascii_add_strip_re.sub('', '_'.join(filename.split()))).strip('._')             # 添加新规则
- 
+    filename = str(_filename_ascii_add_strip_re.sub('', '_'.join(filename.split()))).strip('._')  # 添加新规则
+
     # on nt a couple of special files are present in each folder.  We
     # have to ensure that the target file is not such a filename.  In
     # this case we prepend an underline
     if (
-        os.name == "nt"
-        and filename
-        and filename.split(".")[0].upper() in _windows_device_files
+            os.name == "nt"
+            and filename
+            and filename.split(".")[0].upper() in _windows_device_files
     ):
         filename = f"_{filename}"
- 
+
     return filename
 
 
 def redirect(
-    location: str, code: int = 302, Response: t.Optional[t.Type["Response"]] = None
+        location: str, code: int = 302, Response: t.Optional[t.Type["Response"]] = None
 ) -> "Response":
     """Returns a response object (a WSGI application) that, if called,
     redirects the client to the target location. Supported codes are
@@ -376,20 +376,20 @@ def append_slash_redirect(environ: "WSGIEnvironment", code: int = 308) -> "Respo
 
 
 def send_file(
-    path_or_file: t.Union[os.PathLike, str, t.IO[bytes]],
-    environ: "WSGIEnvironment",
-    mimetype: t.Optional[str] = None,
-    as_attachment: bool = False,
-    download_name: t.Optional[str] = None,
-    conditional: bool = True,
-    etag: t.Union[bool, str] = True,
-    last_modified: t.Optional[t.Union[datetime, int, float]] = None,
-    max_age: t.Optional[
-        t.Union[int, t.Callable[[t.Optional[str]], t.Optional[int]]]
-    ] = None,
-    use_x_sendfile: bool = False,
-    response_class: t.Optional[t.Type["Response"]] = None,
-    _root_path: t.Optional[t.Union[os.PathLike, str]] = None,
+        path_or_file: t.Union[os.PathLike, str, t.IO[bytes]],
+        environ: "WSGIEnvironment",
+        mimetype: t.Optional[str] = None,
+        as_attachment: bool = False,
+        download_name: t.Optional[str] = None,
+        conditional: bool = True,
+        etag: t.Union[bool, str] = True,
+        last_modified: t.Optional[t.Union[datetime, int, float]] = None,
+        max_age: t.Optional[
+            t.Union[int, t.Callable[[t.Optional[str]], t.Optional[int]]]
+        ] = None,
+        use_x_sendfile: bool = False,
+        response_class: t.Optional[t.Type["Response"]] = None,
+        _root_path: t.Optional[t.Union[os.PathLike, str]] = None,
 ) -> "Response":
     """Send the contents of a file to the client.
 
@@ -475,7 +475,7 @@ def send_file(
     headers = Headers()
 
     if isinstance(path_or_file, (os.PathLike, str)) or hasattr(
-        path_or_file, "__fspath__"
+            path_or_file, "__fspath__"
     ):
         path_or_file = t.cast(t.Union[os.PathLike, str], path_or_file)
 
@@ -596,10 +596,10 @@ def send_file(
 
 
 def send_from_directory(
-    directory: t.Union[os.PathLike, str],
-    path: t.Union[os.PathLike, str],
-    environ: "WSGIEnvironment",
-    **kwargs: t.Any,
+        directory: t.Union[os.PathLike, str],
+        path: t.Union[os.PathLike, str],
+        environ: "WSGIEnvironment",
+        **kwargs: t.Any,
 ) -> "Response":
     """Send a file from within a directory using :func:`send_file`.
 
@@ -680,7 +680,7 @@ def import_string(import_name: str, silent: bool = False) -> t.Any:
 
 
 def find_modules(
-    import_path: str, include_packages: bool = False, recursive: bool = False
+        import_path: str, include_packages: bool = False, recursive: bool = False
 ) -> t.Iterator[str]:
     """Finds all the modules below a package.  This can be useful to
     automatically import all views / controllers so that their metaclasses /

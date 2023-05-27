@@ -4,6 +4,16 @@ import warnings
 from pprint import pformat
 from threading import Lock
 
+from .converters import DEFAULT_CONVERTERS
+from .exceptions import BuildError
+from .exceptions import NoMatch
+from .exceptions import RequestAliasRedirect
+from .exceptions import RequestPath
+from .exceptions import RequestRedirect
+from .exceptions import WebsocketMismatch
+from .matcher import StateMachineMatcher
+from .rules import Rule
+from .rules import _simple_rule_re
 from .._internal import _encode_idna
 from .._internal import _get_environ
 from .._internal import _to_str
@@ -18,16 +28,6 @@ from ..urls import url_encode
 from ..urls import url_join
 from ..urls import url_quote
 from ..wsgi import get_host
-from .converters import DEFAULT_CONVERTERS
-from .exceptions import BuildError
-from .exceptions import NoMatch
-from .exceptions import RequestAliasRedirect
-from .exceptions import RequestPath
-from .exceptions import RequestRedirect
-from .exceptions import WebsocketMismatch
-from .matcher import StateMachineMatcher
-from .rules import _simple_rule_re
-from .rules import Rule
 
 if t.TYPE_CHECKING:
     import typing_extensions as te
@@ -92,18 +92,18 @@ class Map:
     lock_class = Lock
 
     def __init__(
-        self,
-        rules: t.Optional[t.Iterable["RuleFactory"]] = None,
-        default_subdomain: str = "",
-        charset: str = "utf-8",
-        strict_slashes: bool = True,
-        merge_slashes: bool = True,
-        redirect_defaults: bool = True,
-        converters: t.Optional[t.Mapping[str, t.Type["BaseConverter"]]] = None,
-        sort_parameters: bool = False,
-        sort_key: t.Optional[t.Callable[[t.Any], t.Any]] = None,
-        encoding_errors: str = "replace",
-        host_matching: bool = False,
+            self,
+            rules: t.Optional[t.Iterable["RuleFactory"]] = None,
+            default_subdomain: str = "",
+            charset: str = "utf-8",
+            strict_slashes: bool = True,
+            merge_slashes: bool = True,
+            redirect_defaults: bool = True,
+            converters: t.Optional[t.Mapping[str, t.Type["BaseConverter"]]] = None,
+            sort_parameters: bool = False,
+            sort_key: t.Optional[t.Callable[[t.Any], t.Any]] = None,
+            encoding_errors: str = "replace",
+            host_matching: bool = False,
     ) -> None:
         self._matcher = StateMachineMatcher(merge_slashes)
         self._rules_by_endpoint: t.Dict[str, t.List[Rule]] = {}
@@ -178,14 +178,14 @@ class Map:
         self._remap = True
 
     def bind(
-        self,
-        server_name: str,
-        script_name: t.Optional[str] = None,
-        subdomain: t.Optional[str] = None,
-        url_scheme: str = "http",
-        default_method: str = "GET",
-        path_info: t.Optional[str] = None,
-        query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
+            self,
+            server_name: str,
+            script_name: t.Optional[str] = None,
+            subdomain: t.Optional[str] = None,
+            url_scheme: str = "http",
+            default_method: str = "GET",
+            path_info: t.Optional[str] = None,
+            query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
     ) -> "MapAdapter":
         """Return a new :class:`MapAdapter` with the details specified to the
         call.  Note that `script_name` will default to ``'/'`` if not further
@@ -244,10 +244,10 @@ class Map:
         )
 
     def bind_to_environ(
-        self,
-        environ: t.Union["WSGIEnvironment", "Request"],
-        server_name: t.Optional[str] = None,
-        subdomain: t.Optional[str] = None,
+            self,
+            environ: t.Union["WSGIEnvironment", "Request"],
+            server_name: t.Optional[str] = None,
+            subdomain: t.Optional[str] = None,
     ) -> "MapAdapter":
         """Like :meth:`bind` but you can pass it an WSGI environment and it
         will fetch the information from that dictionary.  Note that because of
@@ -374,21 +374,20 @@ class Map:
 
 
 class MapAdapter:
-
     """Returned by :meth:`Map.bind` or :meth:`Map.bind_to_environ` and does
     the URL matching and building based on runtime information.
     """
 
     def __init__(
-        self,
-        map: Map,
-        server_name: str,
-        script_name: str,
-        subdomain: t.Optional[str],
-        url_scheme: str,
-        path_info: str,
-        default_method: str,
-        query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
+            self,
+            map: Map,
+            server_name: str,
+            script_name: str,
+            subdomain: t.Optional[str],
+            url_scheme: str,
+            path_info: str,
+            default_method: str,
+            query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
     ):
         self.map = map
         self.server_name = _to_str(server_name)
@@ -404,11 +403,11 @@ class MapAdapter:
         self.websocket = self.url_scheme in {"ws", "wss"}
 
     def dispatch(
-        self,
-        view_func: t.Callable[[str, t.Mapping[str, t.Any]], "WSGIApplication"],
-        path_info: t.Optional[str] = None,
-        method: t.Optional[str] = None,
-        catch_http_exceptions: bool = False,
+            self,
+            view_func: t.Callable[[str, t.Mapping[str, t.Any]], "WSGIApplication"],
+            path_info: t.Optional[str] = None,
+            method: t.Optional[str] = None,
+            catch_http_exceptions: bool = False,
     ) -> "WSGIApplication":
         """Does the complete dispatching process.  `view_func` is called with
         the endpoint and a dict with the values for the view.  It should
@@ -465,33 +464,33 @@ class MapAdapter:
 
     @t.overload
     def match(  # type: ignore
-        self,
-        path_info: t.Optional[str] = None,
-        method: t.Optional[str] = None,
-        return_rule: "te.Literal[False]" = False,
-        query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
-        websocket: t.Optional[bool] = None,
+            self,
+            path_info: t.Optional[str] = None,
+            method: t.Optional[str] = None,
+            return_rule: "te.Literal[False]" = False,
+            query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
+            websocket: t.Optional[bool] = None,
     ) -> t.Tuple[str, t.Mapping[str, t.Any]]:
         ...
 
     @t.overload
     def match(
-        self,
-        path_info: t.Optional[str] = None,
-        method: t.Optional[str] = None,
-        return_rule: "te.Literal[True]" = True,
-        query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
-        websocket: t.Optional[bool] = None,
+            self,
+            path_info: t.Optional[str] = None,
+            method: t.Optional[str] = None,
+            return_rule: "te.Literal[True]" = True,
+            query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
+            websocket: t.Optional[bool] = None,
     ) -> t.Tuple[Rule, t.Mapping[str, t.Any]]:
         ...
 
     def match(
-        self,
-        path_info: t.Optional[str] = None,
-        method: t.Optional[str] = None,
-        return_rule: bool = False,
-        query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
-        websocket: t.Optional[bool] = None,
+            self,
+            path_info: t.Optional[str] = None,
+            method: t.Optional[str] = None,
+            return_rule: bool = False,
+            query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
+            websocket: t.Optional[bool] = None,
     ) -> t.Tuple[t.Union[str, Rule], t.Mapping[str, t.Any]]:
         """The usage is simple: you just pass the match method the current
         path info as well as the method (which defaults to `GET`).  The
@@ -659,7 +658,7 @@ class MapAdapter:
                 return rule.endpoint, rv
 
     def test(
-        self, path_info: t.Optional[str] = None, method: t.Optional[str] = None
+            self, path_info: t.Optional[str] = None, method: t.Optional[str] = None
     ) -> bool:
         """Test if a rule would match.  Works like `match` but returns `True`
         if the URL matches, or `False` if it does not exist.
@@ -711,11 +710,11 @@ class MapAdapter:
             return self.server_name
 
     def get_default_redirect(
-        self,
-        rule: Rule,
-        method: str,
-        values: t.MutableMapping[str, t.Any],
-        query_args: t.Union[t.Mapping[str, t.Any], str],
+            self,
+            rule: Rule,
+            method: str,
+            values: t.MutableMapping[str, t.Any],
+            query_args: t.Union[t.Mapping[str, t.Any], str],
     ) -> t.Optional[str]:
         """A helper that returns the URL to redirect to if it finds one.
         This is used for default redirecting only.
@@ -741,10 +740,10 @@ class MapAdapter:
         return query_args
 
     def make_redirect_url(
-        self,
-        path_info: str,
-        query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
-        domain_part: t.Optional[str] = None,
+            self,
+            path_info: str,
+            query_args: t.Optional[t.Union[t.Mapping[str, t.Any], str]] = None,
+            domain_part: t.Optional[str] = None,
     ) -> str:
         """Creates a redirect URL.
 
@@ -761,12 +760,12 @@ class MapAdapter:
         return f"{scheme}://{host}/{path}{suffix}"
 
     def make_alias_redirect_url(
-        self,
-        path: str,
-        endpoint: str,
-        values: t.Mapping[str, t.Any],
-        method: str,
-        query_args: t.Union[t.Mapping[str, t.Any], str],
+            self,
+            path: str,
+            endpoint: str,
+            values: t.Mapping[str, t.Any],
+            method: str,
+            query_args: t.Union[t.Mapping[str, t.Any], str],
     ) -> str:
         """Internally called to make an alias redirect URL."""
         url = self.build(
@@ -778,11 +777,11 @@ class MapAdapter:
         return url
 
     def _partial_build(
-        self,
-        endpoint: str,
-        values: t.Mapping[str, t.Any],
-        method: t.Optional[str],
-        append_unknown: bool,
+            self,
+            endpoint: str,
+            values: t.Mapping[str, t.Any],
+            method: t.Optional[str],
+            append_unknown: bool,
     ) -> t.Optional[t.Tuple[str, str, bool]]:
         """Helper for :meth:`build`.  Returns subdomain and path for the
         rule that accepts this endpoint, values and method.
@@ -819,13 +818,13 @@ class MapAdapter:
         return first_match
 
     def build(
-        self,
-        endpoint: str,
-        values: t.Optional[t.Mapping[str, t.Any]] = None,
-        method: t.Optional[str] = None,
-        force_external: bool = False,
-        append_unknown: bool = True,
-        url_scheme: t.Optional[str] = None,
+            self,
+            endpoint: str,
+            values: t.Optional[t.Mapping[str, t.Any]] = None,
+            method: t.Optional[str] = None,
+            force_external: bool = False,
+            append_unknown: bool = True,
+            url_scheme: t.Optional[str] = None,
     ) -> str:
         """Building URLs works pretty much the other way round.  Instead of
         `match` you call `build` and pass it the endpoint and a dict of
@@ -935,8 +934,8 @@ class MapAdapter:
 
         # shortcut this.
         if not force_external and (
-            (self.map.host_matching and host == self.server_name)
-            or (not self.map.host_matching and domain_part == self.subdomain)
+                (self.map.host_matching and host == self.server_name)
+                or (not self.map.host_matching and domain_part == self.subdomain)
         ):
             return f"{self.script_name.rstrip('/')}/{path.lstrip('/')}"
 

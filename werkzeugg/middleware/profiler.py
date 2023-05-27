@@ -75,13 +75,13 @@ class ProfilerMiddleware:
     """
 
     def __init__(
-        self,
-        app: "WSGIApplication",
-        stream: t.IO[str] = sys.stdout,
-        sort_by: t.Iterable[str] = ("time", "calls"),
-        restrictions: t.Iterable[t.Union[str, int, float]] = (),
-        profile_dir: t.Optional[str] = None,
-        filename_format: str = "{method}.{path}.{elapsed:.0f}ms.{time:.0f}.prof",
+            self,
+            app: "WSGIApplication",
+            stream: t.IO[str] = sys.stdout,
+            sort_by: t.Iterable[str] = ("time", "calls"),
+            restrictions: t.Iterable[t.Union[str, int, float]] = (),
+            profile_dir: t.Optional[str] = None,
+            filename_format: str = "{method}.{path}.{elapsed:.0f}ms.{time:.0f}.prof",
     ) -> None:
         self._app = app
         self._stream = stream
@@ -91,7 +91,7 @@ class ProfilerMiddleware:
         self._filename_format = filename_format
 
     def __call__(
-        self, environ: "WSGIEnvironment", start_response: "StartResponse"
+            self, environ: "WSGIEnvironment", start_response: "StartResponse"
     ) -> t.Iterable[bytes]:
         response_body: t.List[bytes] = []
 

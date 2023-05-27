@@ -46,8 +46,8 @@ code, you can add a second except for a specific subclass of an error:
 import typing as t
 from datetime import datetime
 
-from markupsafe import escape
 from markupsafe import Markup
+from markupsafe import escape
 
 from ._internal import _get_environ
 
@@ -74,9 +74,9 @@ class HTTPException(Exception):
     description: t.Optional[str] = None
 
     def __init__(
-        self,
-        description: t.Optional[str] = None,
-        response: t.Optional["Response"] = None,
+            self,
+            description: t.Optional[str] = None,
+            response: t.Optional["Response"] = None,
     ) -> None:
         super().__init__()
         if description is not None:
@@ -91,9 +91,9 @@ class HTTPException(Exception):
         return HTTP_STATUS_CODES.get(self.code, "Unknown Error")  # type: ignore
 
     def get_description(
-        self,
-        environ: t.Optional["WSGIEnvironment"] = None,
-        scope: t.Optional[dict] = None,
+            self,
+            environ: t.Optional["WSGIEnvironment"] = None,
+            scope: t.Optional[dict] = None,
     ) -> str:
         """Get the description."""
         if self.description is None:
@@ -107,9 +107,9 @@ class HTTPException(Exception):
         return f"<p>{description}</p>"
 
     def get_body(
-        self,
-        environ: t.Optional["WSGIEnvironment"] = None,
-        scope: t.Optional[dict] = None,
+            self,
+            environ: t.Optional["WSGIEnvironment"] = None,
+            scope: t.Optional[dict] = None,
     ) -> str:
         """Get the HTML body."""
         return (
@@ -121,17 +121,17 @@ class HTTPException(Exception):
         )
 
     def get_headers(
-        self,
-        environ: t.Optional["WSGIEnvironment"] = None,
-        scope: t.Optional[dict] = None,
+            self,
+            environ: t.Optional["WSGIEnvironment"] = None,
+            scope: t.Optional[dict] = None,
     ) -> t.List[t.Tuple[str, str]]:
         """Get a list of headers."""
         return [("Content-Type", "text/html; charset=utf-8")]
 
     def get_response(
-        self,
-        environ: t.Optional[t.Union["WSGIEnvironment", "WSGIRequest"]] = None,
-        scope: t.Optional[dict] = None,
+            self,
+            environ: t.Optional[t.Union["WSGIEnvironment", "WSGIRequest"]] = None,
+            scope: t.Optional[dict] = None,
     ) -> "Response":
         """Get a response object.  If one was passed to the exception
         it's returned directly.
@@ -151,7 +151,7 @@ class HTTPException(Exception):
         return WSGIResponse(self.get_body(environ, scope), self.code, headers)
 
     def __call__(
-        self, environ: "WSGIEnvironment", start_response: "StartResponse"
+            self, environ: "WSGIEnvironment", start_response: "StartResponse"
     ) -> t.Iterable[bytes]:
         """Call the exception as WSGI application.
 
@@ -296,12 +296,12 @@ class Unauthorized(HTTPException):
     )
 
     def __init__(
-        self,
-        description: t.Optional[str] = None,
-        response: t.Optional["Response"] = None,
-        www_authenticate: t.Optional[
-            t.Union["WWWAuthenticate", t.Iterable["WWWAuthenticate"]]
-        ] = None,
+            self,
+            description: t.Optional[str] = None,
+            response: t.Optional["Response"] = None,
+            www_authenticate: t.Optional[
+                t.Union["WWWAuthenticate", t.Iterable["WWWAuthenticate"]]
+            ] = None,
     ) -> None:
         super().__init__(description, response)
 
@@ -313,9 +313,9 @@ class Unauthorized(HTTPException):
         self.www_authenticate = www_authenticate
 
     def get_headers(
-        self,
-        environ: t.Optional["WSGIEnvironment"] = None,
-        scope: t.Optional[dict] = None,
+            self,
+            environ: t.Optional["WSGIEnvironment"] = None,
+            scope: t.Optional[dict] = None,
     ) -> t.List[t.Tuple[str, str]]:
         headers = super().get_headers(environ, scope)
         if self.www_authenticate:
@@ -366,10 +366,10 @@ class MethodNotAllowed(HTTPException):
     description = "The method is not allowed for the requested URL."
 
     def __init__(
-        self,
-        valid_methods: t.Optional[t.Iterable[str]] = None,
-        description: t.Optional[str] = None,
-        response: t.Optional["Response"] = None,
+            self,
+            valid_methods: t.Optional[t.Iterable[str]] = None,
+            description: t.Optional[str] = None,
+            response: t.Optional["Response"] = None,
     ) -> None:
         """Takes an optional list of valid http methods
         starting with werkzeug 0.3 the list will be mandatory."""
@@ -377,9 +377,9 @@ class MethodNotAllowed(HTTPException):
         self.valid_methods = valid_methods
 
     def get_headers(
-        self,
-        environ: t.Optional["WSGIEnvironment"] = None,
-        scope: t.Optional[dict] = None,
+            self,
+            environ: t.Optional["WSGIEnvironment"] = None,
+            scope: t.Optional[dict] = None,
     ) -> t.List[t.Tuple[str, str]]:
         headers = super().get_headers(environ, scope)
         if self.valid_methods:
@@ -523,11 +523,11 @@ class RequestedRangeNotSatisfiable(HTTPException):
     description = "The server cannot provide the requested range."
 
     def __init__(
-        self,
-        length: t.Optional[int] = None,
-        units: str = "bytes",
-        description: t.Optional[str] = None,
-        response: t.Optional["Response"] = None,
+            self,
+            length: t.Optional[int] = None,
+            units: str = "bytes",
+            description: t.Optional[str] = None,
+            response: t.Optional["Response"] = None,
     ) -> None:
         """Takes an optional `Content-Range` header value based on ``length``
         parameter.
@@ -537,9 +537,9 @@ class RequestedRangeNotSatisfiable(HTTPException):
         self.units = units
 
     def get_headers(
-        self,
-        environ: t.Optional["WSGIEnvironment"] = None,
-        scope: t.Optional[dict] = None,
+            self,
+            environ: t.Optional["WSGIEnvironment"] = None,
+            scope: t.Optional[dict] = None,
     ) -> t.List[t.Tuple[str, str]]:
         headers = super().get_headers(environ, scope)
         if self.length is not None:
@@ -637,18 +637,18 @@ class _RetryAfter(HTTPException):
     """
 
     def __init__(
-        self,
-        description: t.Optional[str] = None,
-        response: t.Optional["Response"] = None,
-        retry_after: t.Optional[t.Union[datetime, int]] = None,
+            self,
+            description: t.Optional[str] = None,
+            response: t.Optional["Response"] = None,
+            retry_after: t.Optional[t.Union[datetime, int]] = None,
     ) -> None:
         super().__init__(description, response)
         self.retry_after = retry_after
 
     def get_headers(
-        self,
-        environ: t.Optional["WSGIEnvironment"] = None,
-        scope: t.Optional[dict] = None,
+            self,
+            environ: t.Optional["WSGIEnvironment"] = None,
+            scope: t.Optional[dict] = None,
     ) -> t.List[t.Tuple[str, str]]:
         headers = super().get_headers(environ, scope)
 
@@ -727,10 +727,10 @@ class InternalServerError(HTTPException):
     )
 
     def __init__(
-        self,
-        description: t.Optional[str] = None,
-        response: t.Optional["Response"] = None,
-        original_exception: t.Optional[BaseException] = None,
+            self,
+            description: t.Optional[str] = None,
+            response: t.Optional["Response"] = None,
+            original_exception: t.Optional[BaseException] = None,
     ) -> None:
         #: The original exception that caused this 500 error. Can be
         #: used by frameworks to provide context when handling
@@ -840,9 +840,9 @@ class Aborter:
     """
 
     def __init__(
-        self,
-        mapping: t.Optional[t.Dict[int, t.Type[HTTPException]]] = None,
-        extra: t.Optional[t.Dict[int, t.Type[HTTPException]]] = None,
+            self,
+            mapping: t.Optional[t.Dict[int, t.Type[HTTPException]]] = None,
+            extra: t.Optional[t.Dict[int, t.Type[HTTPException]]] = None,
     ) -> None:
         if mapping is None:
             mapping = default_exceptions
@@ -851,7 +851,7 @@ class Aborter:
             self.mapping.update(extra)
 
     def __call__(
-        self, code: t.Union[int, "Response"], *args: t.Any, **kwargs: t.Any
+            self, code: t.Union[int, "Response"], *args: t.Any, **kwargs: t.Any
     ) -> "te.NoReturn":
         from .sansio.response import Response
 
@@ -865,7 +865,7 @@ class Aborter:
 
 
 def abort(
-    status: t.Union[int, "Response"], *args: t.Any, **kwargs: t.Any
+        status: t.Union[int, "Response"], *args: t.Any, **kwargs: t.Any
 ) -> "te.NoReturn":
     """Raises an :py:exc:`HTTPException` for the given status code or WSGI
     application.

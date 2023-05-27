@@ -203,9 +203,9 @@ class Console:
     """An interactive console."""
 
     def __init__(
-        self,
-        globals: t.Optional[t.Dict[str, t.Any]] = None,
-        locals: t.Optional[t.Dict[str, t.Any]] = None,
+            self,
+            globals: t.Optional[t.Dict[str, t.Any]] = None,
+            locals: t.Optional[t.Dict[str, t.Any]] = None,
     ) -> None:
         if locals is None:
             locals = {}

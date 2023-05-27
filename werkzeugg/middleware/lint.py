@@ -129,10 +129,10 @@ class GuardedWrite:
 
 class GuardedIterator:
     def __init__(
-        self,
-        iterator: t.Iterable[bytes],
-        headers_set: t.Tuple[int, Headers],
-        chunks: t.List[int],
+            self,
+            iterator: t.Iterable[bytes],
+            headers_set: t.Tuple[int, Headers],
+            chunks: t.List[int],
     ) -> None:
         self._iterator = iterator
         self._next = iter(iterator).__next__
@@ -175,7 +175,7 @@ class GuardedIterator:
                 for key, _value in headers:
                     key = key.lower()
                     if key not in ("expires", "content-location") and is_entity_header(
-                        key
+                            key
                     ):
                         warn(
                             f"Entity header {key!r} found in 304 response.", HTTPWarning
@@ -241,15 +241,15 @@ class LintMiddleware:
                 stacklevel=4,
             )
         for key in (
-            "REQUEST_METHOD",
-            "SERVER_NAME",
-            "SERVER_PORT",
-            "wsgi.version",
-            "wsgi.input",
-            "wsgi.errors",
-            "wsgi.multithread",
-            "wsgi.multiprocess",
-            "wsgi.run_once",
+                "REQUEST_METHOD",
+                "SERVER_NAME",
+                "SERVER_PORT",
+                "wsgi.version",
+                "wsgi.input",
+                "wsgi.errors",
+                "wsgi.multithread",
+                "wsgi.multiprocess",
+                "wsgi.run_once",
         ):
             if key not in environ:
                 warn(
@@ -278,12 +278,12 @@ class LintMiddleware:
             )
 
     def check_start_response(
-        self,
-        status: str,
-        headers: t.List[t.Tuple[str, str]],
-        exc_info: t.Optional[
-            t.Tuple[t.Type[BaseException], BaseException, TracebackType]
-        ],
+            self,
+            status: str,
+            headers: t.List[t.Tuple[str, str]],
+            exc_info: t.Optional[
+                t.Tuple[t.Type[BaseException], BaseException, TracebackType]
+            ],
     ) -> t.Tuple[int, Headers]:
         check_type("status", status, str)
         status_code_str = status.split(None, 1)[0]
@@ -392,7 +392,7 @@ class LintMiddleware:
         chunks: t.List[int] = []
 
         def checking_start_response(
-            *args: t.Any, **kwargs: t.Any
+                *args: t.Any, **kwargs: t.Any
         ) -> t.Callable[[bytes], None]:
             if len(args) not in {2, 3}:
                 warn(

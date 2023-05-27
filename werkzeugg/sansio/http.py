@@ -15,15 +15,15 @@ _etag_re = re.compile(r'([Ww]/)?(?:"(.*?)"|(.*?))(?:\s*,\s*|$)')
 
 
 def is_resource_modified(
-    http_range: t.Optional[str] = None,
-    http_if_range: t.Optional[str] = None,
-    http_if_modified_since: t.Optional[str] = None,
-    http_if_none_match: t.Optional[str] = None,
-    http_if_match: t.Optional[str] = None,
-    etag: t.Optional[str] = None,
-    data: t.Optional[bytes] = None,
-    last_modified: t.Optional[t.Union[datetime, str]] = None,
-    ignore_if_range: bool = True,
+        http_range: t.Optional[str] = None,
+        http_if_range: t.Optional[str] = None,
+        http_if_modified_since: t.Optional[str] = None,
+        http_if_none_match: t.Optional[str] = None,
+        http_if_match: t.Optional[str] = None,
+        etag: t.Optional[str] = None,
+        data: t.Optional[bytes] = None,
+        last_modified: t.Optional[t.Union[datetime, str]] = None,
+        ignore_if_range: bool = True,
 ) -> bool:
     """Convenience method for conditional requests.
     :param http_range: Range HTTP header
@@ -95,10 +95,10 @@ def is_resource_modified(
 
 
 def parse_cookie(
-    cookie: t.Union[bytes, str, None] = "",
-    charset: str = "utf-8",
-    errors: str = "replace",
-    cls: t.Optional[t.Type["ds.MultiDict"]] = None,
+        cookie: t.Union[bytes, str, None] = "",
+        charset: str = "utf-8",
+        errors: str = "replace",
+        cls: t.Optional[t.Type["ds.MultiDict"]] = None,
 ) -> "ds.MultiDict[str, str]":
     """Parse a cookie from a string.
 

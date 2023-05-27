@@ -35,16 +35,16 @@ if t.TYPE_CHECKING:
 
     t_parse_result = t.Tuple[t.IO[bytes], MultiDict, MultiDict]
 
+
     class TStreamFactory(te.Protocol):
         def __call__(
-            self,
-            total_content_length: t.Optional[int],
-            content_type: t.Optional[str],
-            filename: t.Optional[str],
-            content_length: t.Optional[int] = None,
+                self,
+                total_content_length: t.Optional[int],
+                content_type: t.Optional[str],
+                filename: t.Optional[str],
+                content_length: t.Optional[int] = None,
         ) -> t.IO[bytes]:
             ...
-
 
 F = t.TypeVar("F", bound=t.Callable[..., t.Any])
 
@@ -56,10 +56,10 @@ def _exhaust(stream: t.IO[bytes]) -> None:
 
 
 def default_stream_factory(
-    total_content_length: t.Optional[int],
-    content_type: t.Optional[str],
-    filename: t.Optional[str],
-    content_length: t.Optional[int] = None,
+        total_content_length: t.Optional[int],
+        content_type: t.Optional[str],
+        filename: t.Optional[str],
+        content_length: t.Optional[int] = None,
 ) -> t.IO[bytes]:
     max_size = 1024 * 500
 
@@ -72,14 +72,14 @@ def default_stream_factory(
 
 
 def parse_form_data(
-    environ: "WSGIEnvironment",
-    stream_factory: t.Optional["TStreamFactory"] = None,
-    charset: str = "utf-8",
-    errors: str = "replace",
-    max_form_memory_size: t.Optional[int] = None,
-    max_content_length: t.Optional[int] = None,
-    cls: t.Optional[t.Type[MultiDict]] = None,
-    silent: bool = True,
+        environ: "WSGIEnvironment",
+        stream_factory: t.Optional["TStreamFactory"] = None,
+        charset: str = "utf-8",
+        errors: str = "replace",
+        max_form_memory_size: t.Optional[int] = None,
+        max_content_length: t.Optional[int] = None,
+        cls: t.Optional[t.Type[MultiDict]] = None,
+        silent: bool = True,
 ) -> "t_parse_result":
     """Parse the form data in the environ and return it as tuple in the form
     ``(stream, form, files)``.  You should only call this method if the
@@ -182,14 +182,14 @@ class FormDataParser:
     """
 
     def __init__(
-        self,
-        stream_factory: t.Optional["TStreamFactory"] = None,
-        charset: str = "utf-8",
-        errors: str = "replace",
-        max_form_memory_size: t.Optional[int] = None,
-        max_content_length: t.Optional[int] = None,
-        cls: t.Optional[t.Type[MultiDict]] = None,
-        silent: bool = True,
+            self,
+            stream_factory: t.Optional["TStreamFactory"] = None,
+            charset: str = "utf-8",
+            errors: str = "replace",
+            max_form_memory_size: t.Optional[int] = None,
+            max_content_length: t.Optional[int] = None,
+            cls: t.Optional[t.Type[MultiDict]] = None,
+            silent: bool = True,
     ) -> None:
         if stream_factory is None:
             stream_factory = default_stream_factory
@@ -207,7 +207,7 @@ class FormDataParser:
         self.silent = silent
 
     def get_parse_func(
-        self, mimetype: str, options: t.Dict[str, str]
+            self, mimetype: str, options: t.Dict[str, str]
     ) -> t.Optional[
         t.Callable[
             ["FormDataParser", t.IO[bytes], str, t.Optional[int], t.Dict[str, str]],
@@ -228,11 +228,11 @@ class FormDataParser:
         return self.parse(get_input_stream(environ), mimetype, content_length, options)
 
     def parse(
-        self,
-        stream: t.IO[bytes],
-        mimetype: str,
-        content_length: t.Optional[int],
-        options: t.Optional[t.Dict[str, str]] = None,
+            self,
+            stream: t.IO[bytes],
+            mimetype: str,
+            content_length: t.Optional[int],
+            options: t.Optional[t.Dict[str, str]] = None,
     ) -> "t_parse_result":
         """Parses the information from the given stream, mimetype,
         content length and mimetype parameters.
@@ -245,9 +245,9 @@ class FormDataParser:
         :return: A tuple in the form ``(stream, form, files)``.
         """
         if (
-            self.max_content_length is not None
-            and content_length is not None
-            and content_length > self.max_content_length
+                self.max_content_length is not None
+                and content_length is not None
+                and content_length > self.max_content_length
         ):
             # if the input stream is not exhausted, firefox reports Connection Reset
             _exhaust(stream)
@@ -269,11 +269,11 @@ class FormDataParser:
 
     @exhaust_stream
     def _parse_multipart(
-        self,
-        stream: t.IO[bytes],
-        mimetype: str,
-        content_length: t.Optional[int],
-        options: t.Dict[str, str],
+            self,
+            stream: t.IO[bytes],
+            mimetype: str,
+            content_length: t.Optional[int],
+            options: t.Dict[str, str],
     ) -> "t_parse_result":
         parser = MultiPartParser(
             self.stream_factory,
@@ -292,16 +292,16 @@ class FormDataParser:
 
     @exhaust_stream
     def _parse_urlencoded(
-        self,
-        stream: t.IO[bytes],
-        mimetype: str,
-        content_length: t.Optional[int],
-        options: t.Dict[str, str],
+            self,
+            stream: t.IO[bytes],
+            mimetype: str,
+            content_length: t.Optional[int],
+            options: t.Dict[str, str],
     ) -> "t_parse_result":
         if (
-            self.max_form_memory_size is not None
-            and content_length is not None
-            and content_length > self.max_form_memory_size
+                self.max_form_memory_size is not None
+                and content_length is not None
+                and content_length > self.max_form_memory_size
         ):
             # if the input stream is not exhausted, firefox reports Connection Reset
             _exhaust(stream)
@@ -339,13 +339,13 @@ def _line_parse(line: str) -> t.Tuple[str, bool]:
 
 class MultiPartParser:
     def __init__(
-        self,
-        stream_factory: t.Optional["TStreamFactory"] = None,
-        charset: str = "utf-8",
-        errors: str = "replace",
-        max_form_memory_size: t.Optional[int] = None,
-        cls: t.Optional[t.Type[MultiDict]] = None,
-        buffer_size: int = 64 * 1024,
+            self,
+            stream_factory: t.Optional["TStreamFactory"] = None,
+            charset: str = "utf-8",
+            errors: str = "replace",
+            max_form_memory_size: t.Optional[int] = None,
+            cls: t.Optional[t.Type[MultiDict]] = None,
+            buffer_size: int = 64 * 1024,
     ) -> None:
         self.charset = charset
         self.errors = errors
@@ -377,7 +377,7 @@ class MultiPartParser:
         return self.charset
 
     def start_file_streaming(
-        self, event: File, total_content_length: t.Optional[int]
+            self, event: File, total_content_length: t.Optional[int]
     ) -> t.IO[bytes]:
         content_type = event.headers.get("content-type")
 
@@ -395,7 +395,7 @@ class MultiPartParser:
         return container
 
     def parse(
-        self, stream: t.IO[bytes], boundary: bytes, content_length: t.Optional[int]
+            self, stream: t.IO[bytes], boundary: bytes, content_length: t.Optional[int]
     ) -> t.Tuple[MultiDict, MultiDict]:
         container: t.Union[t.IO[bytes], t.List[bytes]]
         _write: t.Callable[[bytes], t.Any]

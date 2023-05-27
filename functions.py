@@ -57,6 +57,7 @@ def detect_best_device() -> str:
     else:
         return 'cpu'
 
+
 # Test
 # detect_best_device()
 
@@ -82,7 +83,7 @@ def extract_images(dir_path: str, start: int, save_path: str) -> int:
             start += 1
 
     # 返回最后一个编号
-    return start-1
+    return start - 1
 
 # Test
 # extract_images(dir_path='data/all_data', start=1, save_path='data/all_data')

@@ -1,13 +1,16 @@
 import typing as t
 from datetime import datetime
 
+from .http import parse_cookie
+from .utils import get_current_url
+from .utils import get_host
 from .._internal import _to_str
 from ..datastructures import Accept
 from ..datastructures import Authorization
 from ..datastructures import CharsetAccept
 from ..datastructures import ETags
-from ..datastructures import Headers
 from ..datastructures import HeaderSet
+from ..datastructures import Headers
 from ..datastructures import IfRange
 from ..datastructures import ImmutableList
 from ..datastructures import ImmutableMultiDict
@@ -30,9 +33,6 @@ from ..urls import url_decode
 from ..user_agent import UserAgent
 from ..utils import cached_property
 from ..utils import header_property
-from .http import parse_cookie
-from .utils import get_current_url
-from .utils import get_host
 
 
 class Request:
@@ -117,15 +117,15 @@ class Request:
     trusted_hosts: t.Optional[t.List[str]] = None
 
     def __init__(
-        self,
-        method: str,
-        scheme: str,
-        server: t.Optional[t.Tuple[str, t.Optional[int]]],
-        root_path: str,
-        path: str,
-        query_string: bytes,
-        headers: Headers,
-        remote_addr: t.Optional[str],
+            self,
+            method: str,
+            scheme: str,
+            server: t.Optional[t.Tuple[str, t.Optional[int]]],
+            root_path: str,
+            path: str,
+            query_string: bytes,
+            headers: Headers,
+            remote_addr: t.Optional[str],
     ) -> None:
         #: The method the request was made with, such as ``GET``.
         self.method = method.upper()
@@ -541,7 +541,7 @@ class Request:
         """
         mt = self.mimetype
         return (
-            mt == "application/json"
-            or mt.startswith("application/")
-            and mt.endswith("+json")
+                mt == "application/json"
+                or mt.startswith("application/")
+                and mt.endswith("+json")
         )

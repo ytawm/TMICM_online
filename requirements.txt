@@ -1,0 +1,10 @@
+torch>=2.0.0
+torchvision>=0.15.1
+numpy>=1.24.2
+Pillow>=9.5.0
+albumentations>=1.3.0
+opencv-python>=4.7.0.72
+efficientnet-pytorch>=0.7.1
+flask
+flask-uploads
+Werkzeug

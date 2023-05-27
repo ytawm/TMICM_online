@@ -4,6 +4,14 @@ import typing as t
 import warnings
 from http import HTTPStatus
 
+from werkzeug._internal import _get_environ
+from werkzeug.http import generate_etag
+from werkzeug.http import http_date
+from werkzeug.http import is_resource_modified
+from werkzeug.http import parse_etags
+from werkzeug.http import parse_range_header
+from werkzeug.wsgi import _RangeWrapper
+
 from .._internal import _to_bytes
 from ..datastructures import Headers
 from ..http import remove_entity_headers
@@ -13,13 +21,6 @@ from ..urls import url_join
 from ..utils import cached_property
 from ..wsgi import ClosingIterator
 from ..wsgi import get_current_url
-from werkzeug._internal import _get_environ
-from werkzeug.http import generate_etag
-from werkzeug.http import http_date
-from werkzeug.http import is_resource_modified
-from werkzeug.http import parse_etags
-from werkzeug.http import parse_range_header
-from werkzeug.wsgi import _RangeWrapper
 
 if t.TYPE_CHECKING:
     import typing_extensions as te
@@ -45,7 +46,7 @@ def _warn_if_string(iterable: t.Iterable) -> None:
 
 
 def _iter_encoded(
-    iterable: t.Iterable[t.Union[str, bytes]], charset: str
+        iterable: t.Iterable[t.Union[str, bytes]], charset: str
 ) -> t.Iterator[bytes]:
     for item in iterable:
         if isinstance(item, str):
@@ -168,20 +169,20 @@ class Response(_SansIOResponse):
     response: t.Union[t.Iterable[str], t.Iterable[bytes]]
 
     def __init__(
-        self,
-        response: t.Optional[
-            t.Union[t.Iterable[bytes], bytes, t.Iterable[str], str]
-        ] = None,
-        status: t.Optional[t.Union[int, str, HTTPStatus]] = None,
-        headers: t.Optional[
-            t.Union[
-                t.Mapping[str, t.Union[str, int, t.Iterable[t.Union[str, int]]]],
-                t.Iterable[t.Tuple[str, t.Union[str, int]]],
-            ]
-        ] = None,
-        mimetype: t.Optional[str] = None,
-        content_type: t.Optional[str] = None,
-        direct_passthrough: bool = False,
+            self,
+            response: t.Optional[
+                t.Union[t.Iterable[bytes], bytes, t.Iterable[str], str]
+            ] = None,
+            status: t.Optional[t.Union[int, str, HTTPStatus]] = None,
+            headers: t.Optional[
+                t.Union[
+                    t.Mapping[str, t.Union[str, int, t.Iterable[t.Union[str, int]]]],
+                    t.Iterable[t.Tuple[str, t.Union[str, int]]],
+                ]
+            ] = None,
+            mimetype: t.Optional[str] = None,
+            content_type: t.Optional[str] = None,
+            direct_passthrough: bool = False,
     ) -> None:
         super().__init__(
             status=status,
@@ -227,7 +228,7 @@ class Response(_SansIOResponse):
 
     @classmethod
     def force_type(
-        cls, response: "Response", environ: t.Optional["WSGIEnvironment"] = None
+            cls, response: "Response", environ: t.Optional["WSGIEnvironment"] = None
     ) -> "Response":
         """Enforce that the WSGI response is a response object of the current
         type.  Werkzeug will use the :class:`Response` internally in many
@@ -272,7 +273,7 @@ class Response(_SansIOResponse):
 
     @classmethod
     def from_app(
-        cls, app: "WSGIApplication", environ: "WSGIEnvironment", buffered: bool = False
+            cls, app: "WSGIApplication", environ: "WSGIEnvironment", buffered: bool = False
     ) -> "Response":
         """Create a new response object from an application output.  This
         works best if you pass it an application that returns a generator all
@@ -551,11 +552,11 @@ class Response(_SansIOResponse):
         # response. We however should not do that if we have a 304
         # response.
         if (
-            self.automatically_set_content_length
-            and self.is_sequence
-            and content_length is None
-            and status not in (204, 304)
-            and not (100 <= status < 200)
+                self.automatically_set_content_length
+                and self.is_sequence
+                and content_length is None
+                and status not in (204, 304)
+                and not (100 <= status < 200)
         ):
             try:
                 content_length = sum(len(_to_bytes(x, "ascii")) for x in self.response)
@@ -584,9 +585,9 @@ class Response(_SansIOResponse):
         """
         status = self.status_code
         if (
-            environ["REQUEST_METHOD"] == "HEAD"
-            or 100 <= status < 200
-            or status in (204, 304)
+                environ["REQUEST_METHOD"] == "HEAD"
+                or 100 <= status < 200
+                or status in (204, 304)
         ):
             iterable: t.Iterable[bytes] = ()
         elif self.direct_passthrough:
@@ -598,7 +599,7 @@ class Response(_SansIOResponse):
         return ClosingIterator(iterable, self.close)
 
     def get_wsgi_response(
-        self, environ: "WSGIEnvironment"
+            self, environ: "WSGIEnvironment"
     ) -> t.Tuple[t.Iterable[bytes], str, t.List[t.Tuple[str, str]]]:
         """Returns the final WSGI response as tuple.  The first item in
         the tuple is the application iterator, the second the status and
@@ -617,7 +618,7 @@ class Response(_SansIOResponse):
         return app_iter, self.status, headers.to_wsgi_list()
 
     def __call__(
-        self, environ: "WSGIEnvironment", start_response: "StartResponse"
+            self, environ: "WSGIEnvironment", start_response: "StartResponse"
     ) -> t.Iterable[bytes]:
         """Process this response as WSGI application.
 
@@ -688,21 +689,21 @@ class Response(_SansIOResponse):
         resource is considered unchanged when compared with `If-Range` header.
         """
         return (
-            "HTTP_IF_RANGE" not in environ
-            or not is_resource_modified(
-                environ,
-                self.headers.get("etag"),
-                None,
-                self.headers.get("last-modified"),
-                ignore_if_range=False,
-            )
+                "HTTP_IF_RANGE" not in environ
+                or not is_resource_modified(
+            environ,
+            self.headers.get("etag"),
+            None,
+            self.headers.get("last-modified"),
+            ignore_if_range=False,
+        )
         ) and "HTTP_RANGE" in environ
 
     def _process_range_request(
-        self,
-        environ: "WSGIEnvironment",
-        complete_length: t.Optional[int] = None,
-        accept_ranges: t.Optional[t.Union[bool, str]] = None,
+            self,
+            environ: "WSGIEnvironment",
+            complete_length: t.Optional[int] = None,
+            accept_ranges: t.Optional[t.Union[bool, str]] = None,
     ) -> bool:
         """Handle Range Request related headers (RFC7233).  If `Accept-Ranges`
         header is valid, and Range Request is processable, we set the headers
@@ -720,10 +721,10 @@ class Response(_SansIOResponse):
         from ..exceptions import RequestedRangeNotSatisfiable
 
         if (
-            accept_ranges is None
-            or complete_length is None
-            or complete_length == 0
-            or not self._is_range_request_processable(environ)
+                accept_ranges is None
+                or complete_length is None
+                or complete_length == 0
+                or not self._is_range_request_processable(environ)
         ):
             return False
 
@@ -747,10 +748,10 @@ class Response(_SansIOResponse):
         return True
 
     def make_conditional(
-        self,
-        request_or_environ: t.Union["WSGIEnvironment", "Request"],
-        accept_ranges: t.Union[bool, str] = False,
-        complete_length: t.Optional[int] = None,
+            self,
+            request_or_environ: t.Union["WSGIEnvironment", "Request"],
+            accept_ranges: t.Union[bool, str] = False,
+            complete_length: t.Optional[int] = None,
     ) -> "Response":
         """Make the response conditional to the request.  This method works
         best if an etag was defined for the response already.  The `add_etag`
@@ -803,18 +804,18 @@ class Response(_SansIOResponse):
             accept_ranges = _clean_accept_ranges(accept_ranges)
             is206 = self._process_range_request(environ, complete_length, accept_ranges)
             if not is206 and not is_resource_modified(
-                environ,
-                self.headers.get("etag"),
-                None,
-                self.headers.get("last-modified"),
+                    environ,
+                    self.headers.get("etag"),
+                    None,
+                    self.headers.get("last-modified"),
             ):
                 if parse_etags(environ.get("HTTP_IF_MATCH")):
                     self.status_code = 412
                 else:
                     self.status_code = 304
             if (
-                self.automatically_set_content_length
-                and "content-length" not in self.headers
+                    self.automatically_set_content_length
+                    and "content-length" not in self.headers
             ):
                 length = self.calculate_content_length()
                 if length is not None:

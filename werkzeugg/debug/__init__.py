@@ -16,6 +16,10 @@ from os.path import basename
 from os.path import join
 from zlib import adler32
 
+from .console import Console
+from .tbtools import DebugFrameSummary
+from .tbtools import DebugTraceback
+from .tbtools import render_console_html
 from .._internal import _log
 from ..exceptions import NotFound
 from ..http import parse_cookie
@@ -23,10 +27,6 @@ from ..security import gen_salt
 from ..utils import send_file
 from ..wrappers.request import Request
 from ..wrappers.response import Response
-from .console import Console
-from .tbtools import DebugFrameSummary
-from .tbtools import DebugTraceback
-from .tbtools import render_console_html
 
 if t.TYPE_CHECKING:
     from _typeshed.wsgi import StartResponse
@@ -99,10 +99,10 @@ def get_machine_id() -> t.Optional[t.Union[str, bytes]]:
 
             try:
                 with winreg.OpenKey(
-                    winreg.HKEY_LOCAL_MACHINE,
-                    "SOFTWARE\\Microsoft\\Cryptography",
-                    0,
-                    winreg.KEY_READ | winreg.KEY_WOW64_64KEY,
+                        winreg.HKEY_LOCAL_MACHINE,
+                        "SOFTWARE\\Microsoft\\Cryptography",
+                        0,
+                        winreg.KEY_READ | winreg.KEY_WOW64_64KEY,
                 ) as rk:
                     guid: t.Union[str, bytes]
                     guid_type: int
@@ -135,7 +135,7 @@ class _ConsoleFrame:
 
 
 def get_pin_and_cookie_name(
-    app: "WSGIApplication",
+        app: "WSGIApplication",
 ) -> t.Union[t.Tuple[str, str], t.Tuple[None, None]]:
     """Given an application object this returns a semi-stable 9 digit pin
     code and a random key.  The hope is that this is stable between
@@ -210,7 +210,7 @@ def get_pin_and_cookie_name(
         for group_size in 5, 4, 3:
             if len(num) % group_size == 0:
                 rv = "-".join(
-                    num[x : x + group_size].rjust(group_size, "0")
+                    num[x: x + group_size].rjust(group_size, "0")
                     for x in range(0, len(num), group_size)
                 )
                 break
@@ -261,15 +261,15 @@ class DebuggedApplication:
     _pin_cookie: str
 
     def __init__(
-        self,
-        app: "WSGIApplication",
-        evalex: bool = False,
-        request_key: str = "werkzeug.request",
-        console_path: str = "/console",
-        console_init_func: t.Optional[t.Callable[[], t.Dict[str, t.Any]]] = None,
-        show_hidden_frames: bool = False,
-        pin_security: bool = True,
-        pin_logging: bool = True,
+            self,
+            app: "WSGIApplication",
+            evalex: bool = False,
+            request_key: str = "werkzeug.request",
+            console_path: str = "/console",
+            console_init_func: t.Optional[t.Callable[[], t.Dict[str, t.Any]]] = None,
+            show_hidden_frames: bool = False,
+            pin_security: bool = True,
+            pin_logging: bool = True,
     ) -> None:
         if not console_init_func:
             console_init_func = None
@@ -316,7 +316,7 @@ class DebuggedApplication:
         return self._pin_cookie
 
     def debug_application(
-        self, environ: "WSGIEnvironment", start_response: "StartResponse"
+            self, environ: "WSGIEnvironment", start_response: "StartResponse"
     ) -> t.Iterator[bytes]:
         """Run the application and conserve the traceback frames."""
         contexts: t.List[t.ContextManager[t.Any]] = []
@@ -364,10 +364,10 @@ class DebuggedApplication:
             environ["wsgi.errors"].write("".join(tb.render_traceback_text()))
 
     def execute_command(  # type: ignore[return]
-        self,
-        request: Request,
-        command: str,
-        frame: t.Union[DebugFrameSummary, _ConsoleFrame],
+            self,
+            request: Request,
+            command: str,
+            frame: t.Union[DebugFrameSummary, _ConsoleFrame],
     ) -> Response:
         """Execute a command in a console."""
         contexts = self.frame_contexts.get(id(frame), [])
@@ -497,7 +497,7 @@ class DebuggedApplication:
         return Response("")
 
     def __call__(
-        self, environ: "WSGIEnvironment", start_response: "StartResponse"
+            self, environ: "WSGIEnvironment", start_response: "StartResponse"
     ) -> t.Iterable[bytes]:
         """Dispatch the requests."""
         # important: don't ever access a function here that reads the incoming
@@ -517,17 +517,17 @@ class DebuggedApplication:
             elif cmd == "printpin" and secret == self.secret:
                 response = self.log_pin_request()  # type: ignore
             elif (
-                self.evalex
-                and cmd is not None
-                and frame is not None
-                and self.secret == secret
-                and self.check_pin_trust(environ)
+                    self.evalex
+                    and cmd is not None
+                    and frame is not None
+                    and self.secret == secret
+                    and self.check_pin_trust(environ)
             ):
                 response = self.execute_command(request, cmd, frame)  # type: ignore
         elif (
-            self.evalex
-            and self.console_path is not None
-            and request.path == self.console_path
+                self.evalex
+                and self.console_path is not None
+                and request.path == self.console_path
         ):
             response = self.display_console(request)  # type: ignore
         return response(environ, start_response)

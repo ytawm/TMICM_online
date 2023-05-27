@@ -54,11 +54,11 @@ class UnicodeConverter(BaseConverter):
     part_isolating = True
 
     def __init__(
-        self,
-        map: "Map",
-        minlength: int = 1,
-        maxlength: t.Optional[int] = None,
-        length: t.Optional[int] = None,
+            self,
+            map: "Map",
+            minlength: int = 1,
+            maxlength: t.Optional[int] = None,
+            length: t.Optional[int] = None,
     ) -> None:
         super().__init__(map)
         if length is not None:
@@ -127,12 +127,12 @@ class NumberConverter(BaseConverter):
     part_isolating = True
 
     def __init__(
-        self,
-        map: "Map",
-        fixed_digits: int = 0,
-        min: t.Optional[int] = None,
-        max: t.Optional[int] = None,
-        signed: bool = False,
+            self,
+            map: "Map",
+            fixed_digits: int = 0,
+            min: t.Optional[int] = None,
+            max: t.Optional[int] = None,
+            signed: bool = False,
     ) -> None:
         if signed:
             self.regex = self.signed_regex
@@ -147,7 +147,7 @@ class NumberConverter(BaseConverter):
             raise ValidationError()
         value = self.num_convert(value)
         if (self.min is not None and value < self.min) or (
-            self.max is not None and value > self.max
+                self.max is not None and value > self.max
         ):
             raise ValidationError()
         return value
@@ -213,11 +213,11 @@ class FloatConverter(NumberConverter):
     part_isolating = True
 
     def __init__(
-        self,
-        map: "Map",
-        min: t.Optional[float] = None,
-        max: t.Optional[float] = None,
-        signed: bool = False,
+            self,
+            map: "Map",
+            min: t.Optional[float] = None,
+            max: t.Optional[float] = None,
+            signed: bool = False,
     ) -> None:
         super().__init__(map, min=min, max=max, signed=signed)  # type: ignore
 

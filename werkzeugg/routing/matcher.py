@@ -65,7 +65,7 @@ class StateMachineMatcher:
         _update_state(state)
 
     def match(
-        self, domain: str, path: str, method: str, websocket: bool
+            self, domain: str, path: str, method: str, websocket: bool
     ) -> t.Tuple[Rule, t.MutableMapping[str, t.Any]]:
         # To match to a rule we need to start at the root state and
         # try to follow the transitions until we find a match, or find
@@ -75,7 +75,7 @@ class StateMachineMatcher:
         websocket_mismatch = False
 
         def _match(
-            state: State, parts: t.List[str], values: t.List[str]
+                state: State, parts: t.List[str], values: t.List[str]
         ) -> t.Optional[t.Tuple[Rule, t.List[str]]]:
             # This function is meant to be called recursively, and will attempt
             # to match the head part to the state's transitions.
@@ -100,7 +100,7 @@ class StateMachineMatcher:
                 if "" in state.static:
                     for rule in state.static[""].rules:
                         if websocket == rule.websocket and (
-                            rule.methods is None or method in rule.methods
+                                rule.methods is None or method in rule.methods
                         ):
                             if rule.strict_slashes:
                                 raise SlashRequired()

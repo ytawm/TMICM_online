@@ -9,8 +9,8 @@ import typing as t
 
 from markupsafe import escape
 
-from ..utils import cached_property
 from .console import Console
+from ..utils import cached_property
 
 HEADER = """\
 <!doctype html>
@@ -58,8 +58,8 @@ FOOTER = """\
 """
 
 PAGE_HTML = (
-    HEADER
-    + """\
+        HEADER
+        + """\
 <h1>%(exception_type)s</h1>
 <div class="detail">
   <p class="errormsg">%(exception)s</p>
@@ -80,8 +80,8 @@ PAGE_HTML = (
   exceptions and much more.</span>
 </div>
 """
-    + FOOTER
-    + """
+        + FOOTER
+        + """
 <!--
 
 %(plaintext_cs)s
@@ -91,8 +91,8 @@ PAGE_HTML = (
 )
 
 CONSOLE_HTML = (
-    HEADER
-    + """\
+        HEADER
+        + """\
 <h1>Interactive Console</h1>
 <div class="explanation">
 In this console you can execute Python expressions in the context of the
@@ -100,7 +100,7 @@ application.  The initial namespace was created by the debugger automatically.
 </div>
 <div class="console"><div class="inner">The Console requires JavaScript.</div></div>
 """
-    + FOOTER
+        + FOOTER
 )
 
 SUMMARY_HTML = """\
@@ -122,11 +122,11 @@ FRAME_HTML = """\
 
 
 def _process_traceback(
-    exc: BaseException,
-    te: t.Optional[traceback.TracebackException] = None,
-    *,
-    skip: int = 0,
-    hide: bool = True,
+        exc: BaseException,
+        te: t.Optional[traceback.TracebackException] = None,
+        *,
+        skip: int = 0,
+        hide: bool = True,
 ) -> traceback.TracebackException:
     if te is None:
         te = traceback.TracebackException.from_exception(exc, lookup_lines=False)
@@ -219,12 +219,12 @@ class DebugTraceback:
     __slots__ = ("_te", "_cache_all_tracebacks", "_cache_all_frames")
 
     def __init__(
-        self,
-        exc: BaseException,
-        te: t.Optional[traceback.TracebackException] = None,
-        *,
-        skip: int = 0,
-        hide: bool = True,
+            self,
+            exc: BaseException,
+            te: t.Optional[traceback.TracebackException] = None,
+            *,
+            skip: int = 0,
+            hide: bool = True,
     ) -> None:
         self._te = _process_traceback(exc, te, skip=skip, hide=hide)
 
@@ -233,7 +233,7 @@ class DebugTraceback:
 
     @cached_property
     def all_tracebacks(
-        self,
+            self,
     ) -> t.List[t.Tuple[t.Optional[str], traceback.TracebackException]]:
         out = []
         current = self._te
@@ -317,7 +317,7 @@ class DebugTraceback:
         }
 
     def render_debugger_html(
-        self, evalex: bool, secret: str, evalex_trusted: bool
+            self, evalex: bool, secret: str, evalex_trusted: bool
     ) -> str:
         exc_lines = list(self._te.format_exception_only())
         plaintext = "".join(self._te.format())
@@ -349,11 +349,11 @@ class DebugFrameSummary(traceback.FrameSummary):
     )
 
     def __init__(
-        self,
-        *,
-        locals: t.Dict[str, t.Any],
-        globals: t.Dict[str, t.Any],
-        **kwargs: t.Any,
+            self,
+            *,
+            locals: t.Dict[str, t.Any],
+            globals: t.Dict[str, t.Any],
+            **kwargs: t.Any,
     ) -> None:
         super().__init__(locals=None, **kwargs)
         self.local_ns = locals
@@ -412,7 +412,7 @@ class DebugFrameSummary(traceback.FrameSummary):
 
             render_line(lines[line_idx], "current")
 
-            for line in lines[line_idx + 1 : stop_idx]:
+            for line in lines[line_idx + 1: stop_idx]:
                 render_line(line, "after")
 
         return FRAME_HTML % {

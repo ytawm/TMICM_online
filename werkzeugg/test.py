@@ -51,11 +51,11 @@ if t.TYPE_CHECKING:
 
 
 def stream_encode_multipart(
-    data: t.Mapping[str, t.Any],
-    use_tempfile: bool = True,
-    threshold: int = 1024 * 500,
-    boundary: t.Optional[str] = None,
-    charset: str = "utf-8",
+        data: t.Mapping[str, t.Any],
+        use_tempfile: bool = True,
+        threshold: int = 1024 * 500,
+        boundary: t.Optional[str] = None,
+        charset: str = "utf-8",
 ) -> t.Tuple[t.IO[bytes], int, str]:
     """Encode a dict of values (either strings or file descriptors or
     :class:`FileStorage` objects.) into a multipart encoded string stored
@@ -103,9 +103,9 @@ def stream_encode_multipart(
             content_type = getattr(value, "content_type", None)
             if content_type is None:
                 content_type = (
-                    filename
-                    and mimetypes.guess_type(filename)[0]
-                    or "application/octet-stream"
+                        filename
+                        and mimetypes.guess_type(filename)[0]
+                        or "application/octet-stream"
                 )
             headers = Headers([("Content-Type", content_type)])
             if filename is None:
@@ -139,9 +139,9 @@ def stream_encode_multipart(
 
 
 def encode_multipart(
-    values: t.Mapping[str, t.Any],
-    boundary: t.Optional[str] = None,
-    charset: str = "utf-8",
+        values: t.Mapping[str, t.Any],
+        boundary: t.Optional[str] = None,
+        charset: str = "utf-8",
 ) -> t.Tuple[str, bytes]:
     """Like `stream_encode_multipart` but returns a tuple in the form
     (``boundary``, ``data``) where data is bytes.
@@ -167,7 +167,7 @@ class _TestCookieHeaders:
         return headers
 
     def get_all(
-        self, name: str, default: t.Optional[t.Iterable[str]] = None
+            self, name: str, default: t.Optional[t.Iterable[str]] = None
     ) -> t.Iterable[str]:
         headers = self.getheaders(name)
 
@@ -206,9 +206,9 @@ class _TestCookieJar(CookieJar):
             environ.pop("HTTP_COOKIE", None)
 
     def extract_wsgi(
-        self,
-        environ: "WSGIEnvironment",
-        headers: t.Union[Headers, t.List[t.Tuple[str, str]]],
+            self,
+            environ: "WSGIEnvironment",
+            headers: t.Union[Headers, t.List[t.Tuple[str, str]]],
     ) -> None:
         """Extract the server's set-cookie headers as cookies into the
         cookie jar.
@@ -357,28 +357,28 @@ class EnvironBuilder:
     _files: t.Optional[FileMultiDict]
 
     def __init__(
-        self,
-        path: str = "/",
-        base_url: t.Optional[str] = None,
-        query_string: t.Optional[t.Union[t.Mapping[str, str], str]] = None,
-        method: str = "GET",
-        input_stream: t.Optional[t.IO[bytes]] = None,
-        content_type: t.Optional[str] = None,
-        content_length: t.Optional[int] = None,
-        errors_stream: t.Optional[t.IO[str]] = None,
-        multithread: bool = False,
-        multiprocess: bool = False,
-        run_once: bool = False,
-        headers: t.Optional[t.Union[Headers, t.Iterable[t.Tuple[str, str]]]] = None,
-        data: t.Optional[
-            t.Union[t.IO[bytes], str, bytes, t.Mapping[str, t.Any]]
-        ] = None,
-        environ_base: t.Optional[t.Mapping[str, t.Any]] = None,
-        environ_overrides: t.Optional[t.Mapping[str, t.Any]] = None,
-        charset: str = "utf-8",
-        mimetype: t.Optional[str] = None,
-        json: t.Optional[t.Mapping[str, t.Any]] = None,
-        auth: t.Optional[t.Union[Authorization, t.Tuple[str, str]]] = None,
+            self,
+            path: str = "/",
+            base_url: t.Optional[str] = None,
+            query_string: t.Optional[t.Union[t.Mapping[str, str], str]] = None,
+            method: str = "GET",
+            input_stream: t.Optional[t.IO[bytes]] = None,
+            content_type: t.Optional[str] = None,
+            content_length: t.Optional[int] = None,
+            errors_stream: t.Optional[t.IO[str]] = None,
+            multithread: bool = False,
+            multiprocess: bool = False,
+            run_once: bool = False,
+            headers: t.Optional[t.Union[Headers, t.Iterable[t.Tuple[str, str]]]] = None,
+            data: t.Optional[
+                t.Union[t.IO[bytes], str, bytes, t.Mapping[str, t.Any]]
+            ] = None,
+            environ_base: t.Optional[t.Mapping[str, t.Any]] = None,
+            environ_overrides: t.Optional[t.Mapping[str, t.Any]] = None,
+            charset: str = "utf-8",
+            mimetype: t.Optional[str] = None,
+            json: t.Optional[t.Mapping[str, t.Any]] = None,
+            auth: t.Optional[t.Union[Authorization, t.Tuple[str, str]]] = None,
     ) -> None:
         path_s = _make_encode_wrapper(path)
         if query_string is not None and path_s("?") in path:
@@ -460,7 +460,7 @@ class EnvironBuilder:
 
     @classmethod
     def from_environ(
-        cls, environ: "WSGIEnvironment", **kwargs: t.Any
+            cls, environ: "WSGIEnvironment", **kwargs: t.Any
     ) -> "EnvironBuilder":
         """Turn an environ dict back into a builder. Any extra kwargs
         override the args extracted from the environ.
@@ -494,11 +494,11 @@ class EnvironBuilder:
         return cls(**out)
 
     def _add_file_from_data(
-        self,
-        key: str,
-        value: t.Union[
-            t.IO[bytes], t.Tuple[t.IO[bytes], str], t.Tuple[t.IO[bytes], str, str]
-        ],
+            self,
+            key: str,
+            value: t.Union[
+                t.IO[bytes], t.Tuple[t.IO[bytes], str], t.Tuple[t.IO[bytes], str, str]
+            ],
     ) -> None:
         """Called in the EnvironBuilder to add files from the data dict."""
         if isinstance(value, tuple):
@@ -864,11 +864,11 @@ class Client:
     """
 
     def __init__(
-        self,
-        application: "WSGIApplication",
-        response_wrapper: t.Optional[t.Type["Response"]] = None,
-        use_cookies: bool = True,
-        allow_subdomain_redirects: bool = False,
+            self,
+            application: "WSGIApplication",
+            response_wrapper: t.Optional[t.Type["Response"]] = None,
+            use_cookies: bool = True,
+            allow_subdomain_redirects: bool = False,
     ) -> None:
         self.application = application
 
@@ -891,18 +891,18 @@ class Client:
         self.allow_subdomain_redirects = allow_subdomain_redirects
 
     def set_cookie(
-        self,
-        server_name: str,
-        key: str,
-        value: str = "",
-        max_age: t.Optional[t.Union[timedelta, int]] = None,
-        expires: t.Optional[t.Union[str, datetime, int, float]] = None,
-        path: str = "/",
-        domain: t.Optional[str] = None,
-        secure: bool = False,
-        httponly: bool = False,
-        samesite: t.Optional[str] = None,
-        charset: str = "utf-8",
+            self,
+            server_name: str,
+            key: str,
+            value: str = "",
+            max_age: t.Optional[t.Union[timedelta, int]] = None,
+            expires: t.Optional[t.Union[str, datetime, int, float]] = None,
+            path: str = "/",
+            domain: t.Optional[str] = None,
+            secure: bool = False,
+            httponly: bool = False,
+            samesite: t.Optional[str] = None,
+            charset: str = "utf-8",
     ) -> None:
         """Sets a cookie in the client's cookie jar.  The server name
         is required and has to match the one that is also passed to
@@ -926,14 +926,14 @@ class Client:
         self.cookie_jar.extract_wsgi(environ, headers)
 
     def delete_cookie(
-        self,
-        server_name: str,
-        key: str,
-        path: str = "/",
-        domain: t.Optional[str] = None,
-        secure: bool = False,
-        httponly: bool = False,
-        samesite: t.Optional[str] = None,
+            self,
+            server_name: str,
+            key: str,
+            path: str = "/",
+            domain: t.Optional[str] = None,
+            secure: bool = False,
+            httponly: bool = False,
+            samesite: t.Optional[str] = None,
     ) -> None:
         """Deletes a cookie in the test client."""
         self.set_cookie(
@@ -949,7 +949,7 @@ class Client:
         )
 
     def run_wsgi_app(
-        self, environ: "WSGIEnvironment", buffered: bool = False
+            self, environ: "WSGIEnvironment", buffered: bool = False
     ) -> t.Tuple[t.Iterable[bytes], str, Headers]:
         """Runs the wrapped WSGI app with the given environment.
 
@@ -966,7 +966,7 @@ class Client:
         return rv
 
     def resolve_redirect(
-        self, response: "TestResponse", buffered: bool = False
+            self, response: "TestResponse", buffered: bool = False
     ) -> "TestResponse":
         """Perform a new request to the location given by the redirect
         response to the previous request.
@@ -992,7 +992,7 @@ class Client:
 
         # Explain why a redirect to a different server name won't be followed.
         if to_name_parts != from_name_parts:
-            if to_name_parts[-len(from_name_parts) :] == from_name_parts:
+            if to_name_parts[-len(from_name_parts):] == from_name_parts:
                 if not self.allow_subdomain_redirects:
                     raise RuntimeError("Following subdomain redirects is not enabled.")
             else:
@@ -1003,7 +1003,7 @@ class Client:
 
         if path_parts[: len(root_parts)] == root_parts:
             # Strip the script root from the path.
-            builder.path = path[len(builder.script_root) :]
+            builder.path = path[len(builder.script_root):]
         else:
             # The new location is not under the script root, so use the
             # whole path and clear the previous root.
@@ -1029,11 +1029,11 @@ class Client:
         return self.open(builder, buffered=buffered)
 
     def open(
-        self,
-        *args: t.Any,
-        buffered: bool = False,
-        follow_redirects: bool = False,
-        **kwargs: t.Any,
+            self,
+            *args: t.Any,
+            buffered: bool = False,
+            follow_redirects: bool = False,
+            **kwargs: t.Any,
     ) -> "TestResponse":
         """Generate an environ dict from the given arguments, make a
         request to the application using it, and return the response.
@@ -1202,7 +1202,7 @@ def create_environ(*args: t.Any, **kwargs: t.Any) -> "WSGIEnvironment":
 
 
 def run_wsgi_app(
-    app: "WSGIApplication", environ: "WSGIEnvironment", buffered: bool = False
+        app: "WSGIApplication", environ: "WSGIEnvironment", buffered: bool = False
 ) -> t.Tuple[t.Iterable[bytes], str, Headers]:
     """Return a tuple in the form (app_iter, status, headers) of the
     application output.  This works best if you pass it an application that
@@ -1314,13 +1314,13 @@ class TestResponse(Response):
     __test__ = False
 
     def __init__(
-        self,
-        response: t.Iterable[bytes],
-        status: str,
-        headers: Headers,
-        request: Request,
-        history: t.Tuple["TestResponse"] = (),  # type: ignore
-        **kwargs: t.Any,
+            self,
+            response: t.Iterable[bytes],
+            status: str,
+            headers: Headers,
+            request: Request,
+            history: t.Tuple["TestResponse"] = (),  # type: ignore
+            **kwargs: t.Any,
     ) -> None:
         super().__init__(response, status, headers, **kwargs)
         self.request = request

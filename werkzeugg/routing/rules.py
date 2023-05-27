@@ -5,10 +5,10 @@ from dataclasses import dataclass
 from string import Template
 from types import CodeType
 
+from .converters import ValidationError
 from .._internal import _to_bytes
 from ..urls import url_encode
 from ..urls import url_quote
-from .converters import ValidationError
 
 if t.TYPE_CHECKING:
     from .converters import BaseConverter
@@ -76,7 +76,6 @@ _converter_args_re = re.compile(
     """,
     re.VERBOSE,
 )
-
 
 _PYTHON_CONSTANTS = {"None": None, "True": True, "False": False}
 
@@ -252,7 +251,7 @@ class RuleTemplateFactory(RuleFactory):
     """
 
     def __init__(
-        self, rules: t.Iterable[RuleFactory], context: t.Dict[str, t.Any]
+            self, rules: t.Iterable[RuleFactory], context: t.Dict[str, t.Any]
     ) -> None:
         self.rules = rules
         self.context = context
@@ -436,19 +435,19 @@ class Rule(RuleFactory):
     """
 
     def __init__(
-        self,
-        string: str,
-        defaults: t.Optional[t.Mapping[str, t.Any]] = None,
-        subdomain: t.Optional[str] = None,
-        methods: t.Optional[t.Iterable[str]] = None,
-        build_only: bool = False,
-        endpoint: t.Optional[str] = None,
-        strict_slashes: t.Optional[bool] = None,
-        merge_slashes: t.Optional[bool] = None,
-        redirect_to: t.Optional[t.Union[str, t.Callable[..., str]]] = None,
-        alias: bool = False,
-        host: t.Optional[str] = None,
-        websocket: bool = False,
+            self,
+            string: str,
+            defaults: t.Optional[t.Mapping[str, t.Any]] = None,
+            subdomain: t.Optional[str] = None,
+            methods: t.Optional[t.Iterable[str]] = None,
+            build_only: bool = False,
+            endpoint: t.Optional[str] = None,
+            strict_slashes: t.Optional[bool] = None,
+            merge_slashes: t.Optional[bool] = None,
+            redirect_to: t.Optional[t.Union[str, t.Callable[..., str]]] = None,
+            alias: bool = False,
+            host: t.Optional[str] = None,
+            websocket: bool = False,
     ) -> None:
         if not string.startswith("/"):
             raise ValueError("urls must start with a leading slash")
@@ -559,11 +558,11 @@ class Rule(RuleFactory):
         self.compile()
 
     def get_converter(
-        self,
-        variable_name: str,
-        converter_name: str,
-        args: t.Tuple,
-        kwargs: t.Mapping[str, t.Any],
+            self,
+            variable_name: str,
+            converter_name: str,
+            args: t.Tuple,
+            kwargs: t.Mapping[str, t.Any],
     ) -> "BaseConverter":
         """Looks up the converter for the given parameter.
 
@@ -689,7 +688,7 @@ class Rule(RuleFactory):
         return locs[name]  # type: ignore
 
     def _compile_builder(
-        self, append_unknown: bool = True
+            self, append_unknown: bool = True
     ) -> t.Callable[..., t.Tuple[str, str]]:
         defaults = self.defaults or {}
         dom_ops: t.List[t.Tuple[bool, str]] = []
@@ -789,7 +788,7 @@ class Rule(RuleFactory):
         return self._get_func_code(code, func_ast.name)
 
     def build(
-        self, values: t.Mapping[str, t.Any], append_unknown: bool = True
+            self, values: t.Mapping[str, t.Any], append_unknown: bool = True
     ) -> t.Optional[t.Tuple[str, str]]:
         """Assembles the relative url for that rule and the subdomain.
         If building doesn't work for some reasons `None` is returned.
@@ -818,7 +817,7 @@ class Rule(RuleFactory):
         )
 
     def suitable_for(
-        self, values: t.Mapping[str, t.Any], method: t.Optional[str] = None
+            self, values: t.Mapping[str, t.Any], method: t.Optional[str] = None
     ) -> bool:
         """Check if the dict of values has enough data for url generation.
 
@@ -827,9 +826,9 @@ class Rule(RuleFactory):
         # if a method was given explicitly and that method is not supported
         # by this rule, this rule is not suitable.
         if (
-            method is not None
-            and self.methods is not None
-            and method not in self.methods
+                method is not None
+                and self.methods is not None
+                and method not in self.methods
         ):
             return False
 

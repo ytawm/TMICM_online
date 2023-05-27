@@ -17,7 +17,6 @@ if t.TYPE_CHECKING:
     from _typeshed.wsgi import StartResponse
     from _typeshed.wsgi import WSGIEnvironment
 
-
 logo = Response(
     base64.b64decode(
         """
@@ -58,7 +57,6 @@ kiIzwKucd0wsEHlLpe5yHXuc6FrNelOl7pY2+11kTWx7VpRu97dXA3DO1vbkhcb4zyvERYajQgAADs
     ),
     mimetype="image/png",
 )
-
 
 TEMPLATE = """\
 <!doctype html>
@@ -145,7 +143,7 @@ def iter_sys_path() -> t.Iterator[t.Tuple[str, bool, bool]]:
         def strip(x: str) -> str:
             prefix = os.path.expanduser("~")
             if x.startswith(prefix):
-                x = f"~{x[len(prefix) :]}"
+                x = f"~{x[len(prefix):]}"
             return x
 
     else:
@@ -196,23 +194,23 @@ def render_testapp(req: Request) -> bytes:
         sys_path.append(f"<li{class_}>{escape(item)}")
 
     return (
-        TEMPLATE
-        % {
-            "python_version": "<br>".join(escape(sys.version).splitlines()),
-            "platform": escape(sys.platform),
-            "os": escape(os.name),
-            "api_version": sys.api_version,
-            "byteorder": sys.byteorder,
-            "werkzeug_version": _werkzeug_version,
-            "python_eggs": "\n".join(python_eggs),
-            "wsgi_env": "\n".join(wsgi_env),
-            "sys_path": "\n".join(sys_path),
-        }
+            TEMPLATE
+            % {
+                "python_version": "<br>".join(escape(sys.version).splitlines()),
+                "platform": escape(sys.platform),
+                "os": escape(os.name),
+                "api_version": sys.api_version,
+                "byteorder": sys.byteorder,
+                "werkzeug_version": _werkzeug_version,
+                "python_eggs": "\n".join(python_eggs),
+                "wsgi_env": "\n".join(wsgi_env),
+                "sys_path": "\n".join(sys_path),
+            }
     ).encode("utf-8")
 
 
 def test_app(
-    environ: "WSGIEnvironment", start_response: "StartResponse"
+        environ: "WSGIEnvironment", start_response: "StartResponse"
 ) -> t.Iterable[bytes]:
     """Simple test application that dumps the environment.  You can use
     it to check if Werkzeug is working properly:

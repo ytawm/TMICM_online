@@ -4,21 +4,22 @@ import typing
 import typing as t
 from io import BytesIO
 
+from werkzeug.exceptions import BadRequest
+
 from .._internal import _wsgi_decoding_dance
 from ..datastructures import CombinedMultiDict
 from ..datastructures import EnvironHeaders
 from ..datastructures import FileStorage
 from ..datastructures import ImmutableMultiDict
-from ..datastructures import iter_multi_items
 from ..datastructures import MultiDict
-from ..formparser import default_stream_factory
+from ..datastructures import iter_multi_items
 from ..formparser import FormDataParser
+from ..formparser import default_stream_factory
 from ..sansio.request import Request as _SansIORequest
 from ..utils import cached_property
 from ..utils import environ_property
 from ..wsgi import _get_server
 from ..wsgi import get_input_stream
-from werkzeug.exceptions import BadRequest
 
 if t.TYPE_CHECKING:
     import typing_extensions as te
@@ -97,10 +98,10 @@ class Request(_SansIORequest):
     shallow: bool
 
     def __init__(
-        self,
-        environ: "WSGIEnvironment",
-        populate_request: bool = True,
-        shallow: bool = False,
+            self,
+            environ: "WSGIEnvironment",
+            populate_request: bool = True,
+            shallow: bool = False,
     ) -> None:
         super().__init__(
             method=environ.get("REQUEST_METHOD", "GET"),
@@ -153,7 +154,7 @@ class Request(_SansIORequest):
 
     @classmethod
     def application(
-        cls, f: t.Callable[["Request"], "WSGIApplication"]
+            cls, f: t.Callable[["Request"], "WSGIApplication"]
     ) -> "WSGIApplication":
         """Decorate a function as responder that accepts the request as
         the last argument.  This works like the :func:`responder`
@@ -192,11 +193,11 @@ class Request(_SansIORequest):
         return t.cast("WSGIApplication", application)
 
     def _get_file_stream(
-        self,
-        total_content_length: t.Optional[int],
-        content_type: t.Optional[str],
-        filename: t.Optional[str] = None,
-        content_length: t.Optional[int] = None,
+            self,
+            total_content_length: t.Optional[int],
+            content_type: t.Optional[str],
+            filename: t.Optional[str] = None,
+            content_length: t.Optional[int] = None,
     ) -> t.IO[bytes]:
         """Called to get a stream for the file upload.
 
@@ -355,24 +356,24 @@ class Request(_SansIORequest):
 
     @typing.overload
     def get_data(  # type: ignore
-        self,
-        cache: bool = True,
-        as_text: "te.Literal[False]" = False,
-        parse_form_data: bool = False,
+            self,
+            cache: bool = True,
+            as_text: "te.Literal[False]" = False,
+            parse_form_data: bool = False,
     ) -> bytes:
         ...
 
     @typing.overload
     def get_data(
-        self,
-        cache: bool = True,
-        as_text: "te.Literal[True]" = ...,
-        parse_form_data: bool = False,
+            self,
+            cache: bool = True,
+            as_text: "te.Literal[True]" = ...,
+            parse_form_data: bool = False,
     ) -> str:
         ...
 
     def get_data(
-        self, cache: bool = True, as_text: bool = False, parse_form_data: bool = False
+            self, cache: bool = True, as_text: bool = False, parse_form_data: bool = False
     ) -> t.Union[bytes, str]:
         """This reads the buffered incoming data from the client into one
         bytes object.  By default this is cached but that behavior can be
@@ -544,7 +545,7 @@ class Request(_SansIORequest):
     _cached_json: t.Tuple[t.Any, t.Any] = (Ellipsis, Ellipsis)
 
     def get_json(
-        self, force: bool = False, silent: bool = False, cache: bool = True
+            self, force: bool = False, silent: bool = False, cache: bool = True
     ) -> t.Optional[t.Any]:
         """Parse :attr:`data` as JSON.
 

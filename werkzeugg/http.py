@@ -191,7 +191,7 @@ class COOP(Enum):
 
 
 def quote_header_value(
-    value: t.Union[str, int], extra_chars: str = "", allow_token: bool = True
+        value: t.Union[str, int], extra_chars: str = "", allow_token: bool = True
 ) -> str:
     """Quote a header value if necessary.
 
@@ -241,7 +241,7 @@ def unquote_header_value(value: str, is_filename: bool = False) -> str:
 
 
 def dump_options_header(
-    header: t.Optional[str], options: t.Mapping[str, t.Optional[t.Union[str, int]]]
+        header: t.Optional[str], options: t.Mapping[str, t.Optional[t.Union[str, int]]]
 ) -> str:
     """The reverse function to :func:`parse_options_header`.
 
@@ -260,8 +260,8 @@ def dump_options_header(
 
 
 def dump_header(
-    iterable: t.Union[t.Dict[str, t.Union[str, int]], t.Iterable[str]],
-    allow_token: bool = True,
+        iterable: t.Union[t.Dict[str, t.Union[str, int]], t.Iterable[str]],
+        allow_token: bool = True,
 ) -> str:
     """Dump an HTTP header again.  This is the reversal of
     :func:`parse_list_header`, :func:`parse_set_header` and
@@ -446,7 +446,7 @@ def parse_options_header(value: t.Optional[str]) -> t.Tuple[str, t.Dict[str, str
             else:
                 options[option] = option_value  # type: ignore[assignment]
 
-            rest = rest[optmatch.end() :]
+            rest = rest[optmatch.end():]
         result.append(options)
         return tuple(result)  # type: ignore[return-value]
 
@@ -463,13 +463,13 @@ def parse_accept_header(value: t.Optional[str]) -> "ds.Accept":
 
 @typing.overload
 def parse_accept_header(
-    value: t.Optional[str], cls: t.Type[_TAnyAccept]
+        value: t.Optional[str], cls: t.Type[_TAnyAccept]
 ) -> _TAnyAccept:
     ...
 
 
 def parse_accept_header(
-    value: t.Optional[str], cls: t.Optional[t.Type[_TAnyAccept]] = None
+        value: t.Optional[str], cls: t.Optional[t.Type[_TAnyAccept]] = None
 ) -> _TAnyAccept:
     """Parses an HTTP Accept-* header.  This does not implement a complete
     valid algorithm but one that supports at least value and quality
@@ -509,22 +509,22 @@ _t_cc_update = t.Optional[t.Callable[[_TAnyCC], None]]
 
 @typing.overload
 def parse_cache_control_header(
-    value: t.Optional[str], on_update: _t_cc_update, cls: None = None
+        value: t.Optional[str], on_update: _t_cc_update, cls: None = None
 ) -> "ds.RequestCacheControl":
     ...
 
 
 @typing.overload
 def parse_cache_control_header(
-    value: t.Optional[str], on_update: _t_cc_update, cls: t.Type[_TAnyCC]
+        value: t.Optional[str], on_update: _t_cc_update, cls: t.Type[_TAnyCC]
 ) -> _TAnyCC:
     ...
 
 
 def parse_cache_control_header(
-    value: t.Optional[str],
-    on_update: _t_cc_update = None,
-    cls: t.Optional[t.Type[_TAnyCC]] = None,
+        value: t.Optional[str],
+        on_update: _t_cc_update = None,
+        cls: t.Optional[t.Type[_TAnyCC]] = None,
 ) -> _TAnyCC:
     """Parse a cache control header.  The RFC differs between response and
     request cache control, this method does not.  It's your responsibility
@@ -557,22 +557,22 @@ _t_csp_update = t.Optional[t.Callable[[_TAnyCSP], None]]
 
 @typing.overload
 def parse_csp_header(
-    value: t.Optional[str], on_update: _t_csp_update, cls: None = None
+        value: t.Optional[str], on_update: _t_csp_update, cls: None = None
 ) -> "ds.ContentSecurityPolicy":
     ...
 
 
 @typing.overload
 def parse_csp_header(
-    value: t.Optional[str], on_update: _t_csp_update, cls: t.Type[_TAnyCSP]
+        value: t.Optional[str], on_update: _t_csp_update, cls: t.Type[_TAnyCSP]
 ) -> _TAnyCSP:
     ...
 
 
 def parse_csp_header(
-    value: t.Optional[str],
-    on_update: _t_csp_update = None,
-    cls: t.Optional[t.Type[_TAnyCSP]] = None,
+        value: t.Optional[str],
+        on_update: _t_csp_update = None,
+        cls: t.Optional[t.Type[_TAnyCSP]] = None,
 ) -> _TAnyCSP:
     """Parse a Content Security Policy header.
 
@@ -606,8 +606,8 @@ def parse_csp_header(
 
 
 def parse_set_header(
-    value: t.Optional[str],
-    on_update: t.Optional[t.Callable[["ds.HeaderSet"], None]] = None,
+        value: t.Optional[str],
+        on_update: t.Optional[t.Callable[["ds.HeaderSet"], None]] = None,
 ) -> "ds.HeaderSet":
     """Parse a set-like header and return a
     :class:`~werkzeug.datastructures.HeaderSet` object:
@@ -639,7 +639,7 @@ def parse_set_header(
 
 
 def parse_authorization_header(
-    value: t.Optional[str],
+        value: t.Optional[str],
 ) -> t.Optional["ds.Authorization"]:
     """Parse an HTTP basic/digest authorization header transmitted by the web
     browser.  The return value is either `None` if the header was invalid or
@@ -685,8 +685,8 @@ def parse_authorization_header(
 
 
 def parse_www_authenticate_header(
-    value: t.Optional[str],
-    on_update: t.Optional[t.Callable[["ds.WWWAuthenticate"], None]] = None,
+        value: t.Optional[str],
+        on_update: t.Optional[t.Callable[["ds.WWWAuthenticate"], None]] = None,
 ) -> "ds.WWWAuthenticate":
     """Parse an HTTP WWW-Authenticate header into a
     :class:`~werkzeug.datastructures.WWWAuthenticate` object.
@@ -726,7 +726,7 @@ def parse_if_range_header(value: t.Optional[str]) -> "ds.IfRange":
 
 
 def parse_range_header(
-    value: t.Optional[str], make_inclusive: bool = True
+        value: t.Optional[str], make_inclusive: bool = True
 ) -> t.Optional["ds.Range"]:
     """Parses a range header into a :class:`~werkzeug.datastructures.Range`
     object.  If the header is missing or malformed `None` is returned.
@@ -785,8 +785,8 @@ def parse_range_header(
 
 
 def parse_content_range_header(
-    value: t.Optional[str],
-    on_update: t.Optional[t.Callable[["ds.ContentRange"], None]] = None,
+        value: t.Optional[str],
+        on_update: t.Optional[t.Callable[["ds.ContentRange"], None]] = None,
 ) -> t.Optional["ds.ContentRange"]:
     """Parses a range header into a
     :class:`~werkzeug.datastructures.ContentRange` object or `None` if
@@ -850,7 +850,7 @@ def quote_etag(etag: str, weak: bool = False) -> str:
 
 
 def unquote_etag(
-    etag: t.Optional[str],
+        etag: t.Optional[str],
 ) -> t.Union[t.Tuple[str, bool], t.Tuple[None, None]]:
     """Unquote a single etag:
 
@@ -942,7 +942,7 @@ def parse_date(value: t.Optional[str]) -> t.Optional[datetime]:
 
 
 def http_date(
-    timestamp: t.Optional[t.Union[datetime, date, int, float, struct_time]] = None
+        timestamp: t.Optional[t.Union[datetime, date, int, float, struct_time]] = None
 ) -> str:
     """Format a datetime object or timestamp into an :rfc:`2822` date
     string.
@@ -1016,11 +1016,11 @@ def dump_age(age: t.Optional[t.Union[timedelta, int]] = None) -> t.Optional[str]
 
 
 def is_resource_modified(
-    environ: "WSGIEnvironment",
-    etag: t.Optional[str] = None,
-    data: t.Optional[bytes] = None,
-    last_modified: t.Optional[t.Union[datetime, str]] = None,
-    ignore_if_range: bool = True,
+        environ: "WSGIEnvironment",
+        etag: t.Optional[str] = None,
+        data: t.Optional[bytes] = None,
+        last_modified: t.Optional[t.Union[datetime, str]] = None,
+        ignore_if_range: bool = True,
 ) -> bool:
     """Convenience method for conditional requests.
 
@@ -1054,8 +1054,8 @@ def is_resource_modified(
 
 
 def remove_entity_headers(
-    headers: t.Union["ds.Headers", t.List[t.Tuple[str, str]]],
-    allowed: t.Iterable[str] = ("expires", "content-location"),
+        headers: t.Union["ds.Headers", t.List[t.Tuple[str, str]]],
+        allowed: t.Iterable[str] = ("expires", "content-location"),
 ) -> None:
     """Remove all entity headers from a list or :class:`Headers` object.  This
     operation works in-place.  `Expires` and `Content-Location` headers are
@@ -1078,7 +1078,7 @@ def remove_entity_headers(
 
 
 def remove_hop_by_hop_headers(
-    headers: t.Union["ds.Headers", t.List[t.Tuple[str, str]]]
+        headers: t.Union["ds.Headers", t.List[t.Tuple[str, str]]]
 ) -> None:
     """Remove all HTTP/1.1 "Hop-by-Hop" headers from a list or
     :class:`Headers` object.  This operation works in-place.
@@ -1115,10 +1115,10 @@ def is_hop_by_hop_header(header: str) -> bool:
 
 
 def parse_cookie(
-    header: t.Union["WSGIEnvironment", str, bytes, None],
-    charset: str = "utf-8",
-    errors: str = "replace",
-    cls: t.Optional[t.Type["ds.MultiDict"]] = None,
+        header: t.Union["WSGIEnvironment", str, bytes, None],
+        charset: str = "utf-8",
+        errors: str = "replace",
+        cls: t.Optional[t.Type["ds.MultiDict"]] = None,
 ) -> "ds.MultiDict[str, str]":
     """Parse a cookie from a string or WSGI environ.
 
@@ -1155,18 +1155,18 @@ def parse_cookie(
 
 
 def dump_cookie(
-    key: str,
-    value: t.Union[bytes, str] = "",
-    max_age: t.Optional[t.Union[timedelta, int]] = None,
-    expires: t.Optional[t.Union[str, datetime, int, float]] = None,
-    path: t.Optional[str] = "/",
-    domain: t.Optional[str] = None,
-    secure: bool = False,
-    httponly: bool = False,
-    charset: str = "utf-8",
-    sync_expires: bool = True,
-    max_size: int = 4093,
-    samesite: t.Optional[str] = None,
+        key: str,
+        value: t.Union[bytes, str] = "",
+        max_age: t.Optional[t.Union[timedelta, int]] = None,
+        expires: t.Optional[t.Union[str, datetime, int, float]] = None,
+        path: t.Optional[str] = "/",
+        domain: t.Optional[str] = None,
+        secure: bool = False,
+        httponly: bool = False,
+        charset: str = "utf-8",
+        sync_expires: bool = True,
+        max_size: int = 4093,
+        samesite: t.Optional[str] = None,
 ) -> str:
     """Create a Set-Cookie header without the ``Set-Cookie`` prefix.
 
@@ -1240,13 +1240,13 @@ def dump_cookie(
     # should be quoted.  Because stdlib did not quote it before I did not
     # want to introduce quoting there now.
     for k, v, q in (
-        (b"Domain", domain, True),
-        (b"Expires", expires, False),
-        (b"Max-Age", max_age, False),
-        (b"Secure", secure, None),
-        (b"HttpOnly", httponly, None),
-        (b"Path", path, False),
-        (b"SameSite", samesite, False),
+            (b"Domain", domain, True),
+            (b"Expires", expires, False),
+            (b"Max-Age", max_age, False),
+            (b"Secure", secure, None),
+            (b"HttpOnly", httponly, None),
+            (b"Path", path, False),
+            (b"SameSite", samesite, False),
     ):
         if q is None:
             if v:
@@ -1289,7 +1289,7 @@ def dump_cookie(
 
 
 def is_byte_range_valid(
-    start: t.Optional[int], stop: t.Optional[int], length: t.Optional[int]
+        start: t.Optional[int], stop: t.Optional[int], length: t.Optional[int]
 ) -> bool:
     """Checks if a given byte content range is valid for the given length.
 

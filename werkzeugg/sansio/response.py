@@ -4,12 +4,6 @@ from datetime import timedelta
 from datetime import timezone
 from http import HTTPStatus
 
-from .._internal import _to_str
-from ..datastructures import Headers
-from ..datastructures import HeaderSet
-from ..http import dump_cookie
-from ..http import HTTP_STATUS_CODES
-from ..utils import get_content_type
 from werkzeug.datastructures import CallbackDict
 from werkzeug.datastructures import ContentRange
 from werkzeug.datastructures import ContentSecurityPolicy
@@ -33,6 +27,13 @@ from werkzeug.http import quote_etag
 from werkzeug.http import unquote_etag
 from werkzeug.utils import header_property
 
+from .._internal import _to_str
+from ..datastructures import HeaderSet
+from ..datastructures import Headers
+from ..http import HTTP_STATUS_CODES
+from ..http import dump_cookie
+from ..utils import get_content_type
+
 
 def _set_property(name: str, doc: t.Optional[str] = None) -> property:
     def fget(self: "Response") -> HeaderSet:
@@ -45,10 +46,10 @@ def _set_property(name: str, doc: t.Optional[str] = None) -> property:
         return parse_set_header(self.headers.get(name), on_update)
 
     def fset(
-        self: "Response",
-        value: t.Optional[
-            t.Union[str, t.Dict[str, t.Union[str, int]], t.Iterable[str]]
-        ],
+            self: "Response",
+            value: t.Optional[
+                t.Union[str, t.Dict[str, t.Union[str, int]], t.Iterable[str]]
+            ],
     ) -> None:
         if not value:
             del self.headers[name]
@@ -108,16 +109,16 @@ class Response:
     headers: Headers
 
     def __init__(
-        self,
-        status: t.Optional[t.Union[int, str, HTTPStatus]] = None,
-        headers: t.Optional[
-            t.Union[
-                t.Mapping[str, t.Union[str, int, t.Iterable[t.Union[str, int]]]],
-                t.Iterable[t.Tuple[str, t.Union[str, int]]],
-            ]
-        ] = None,
-        mimetype: t.Optional[str] = None,
-        content_type: t.Optional[str] = None,
+            self,
+            status: t.Optional[t.Union[int, str, HTTPStatus]] = None,
+            headers: t.Optional[
+                t.Union[
+                    t.Mapping[str, t.Union[str, int, t.Iterable[t.Union[str, int]]]],
+                    t.Iterable[t.Tuple[str, t.Union[str, int]]],
+                ]
+            ] = None,
+            mimetype: t.Optional[str] = None,
+            content_type: t.Optional[str] = None,
     ) -> None:
         if isinstance(headers, Headers):
             self.headers = headers
@@ -190,16 +191,16 @@ class Response:
         return status, status_code
 
     def set_cookie(
-        self,
-        key: str,
-        value: str = "",
-        max_age: t.Optional[t.Union[timedelta, int]] = None,
-        expires: t.Optional[t.Union[str, datetime, int, float]] = None,
-        path: t.Optional[str] = "/",
-        domain: t.Optional[str] = None,
-        secure: bool = False,
-        httponly: bool = False,
-        samesite: t.Optional[str] = None,
+            self,
+            key: str,
+            value: str = "",
+            max_age: t.Optional[t.Union[timedelta, int]] = None,
+            expires: t.Optional[t.Union[str, datetime, int, float]] = None,
+            path: t.Optional[str] = "/",
+            domain: t.Optional[str] = None,
+            secure: bool = False,
+            httponly: bool = False,
+            samesite: t.Optional[str] = None,
     ) -> None:
         """Sets a cookie.
 
@@ -243,13 +244,13 @@ class Response:
         )
 
     def delete_cookie(
-        self,
-        key: str,
-        path: str = "/",
-        domain: t.Optional[str] = None,
-        secure: bool = False,
-        httponly: bool = False,
-        samesite: t.Optional[str] = None,
+            self,
+            key: str,
+            path: str = "/",
+            domain: t.Optional[str] = None,
+            secure: bool = False,
+            httponly: bool = False,
+            samesite: t.Optional[str] = None,
     ) -> None:
         """Delete a cookie.  Fails silently if key doesn't exist.
 
@@ -282,9 +283,9 @@ class Response:
         """
         mt = self.mimetype
         return mt is not None and (
-            mt == "application/json"
-            or mt.startswith("application/")
-            and mt.endswith("+json")
+                mt == "application/json"
+                or mt.startswith("application/")
+                and mt.endswith("+json")
         )
 
     # Common Descriptors
@@ -590,7 +591,7 @@ class Response:
 
     @content_security_policy.setter
     def content_security_policy(
-        self, value: t.Optional[t.Union[ContentSecurityPolicy, str]]
+            self, value: t.Optional[t.Union[ContentSecurityPolicy, str]]
     ) -> None:
         if not value:
             del self.headers["content-security-policy"]
@@ -625,7 +626,7 @@ class Response:
 
     @content_security_policy_report_only.setter
     def content_security_policy_report_only(
-        self, value: t.Optional[t.Union[ContentSecurityPolicy, str]]
+            self, value: t.Optional[t.Union[ContentSecurityPolicy, str]]
     ) -> None:
         if not value:
             del self.headers["content-security-policy-report-only"]
