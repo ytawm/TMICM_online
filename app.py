@@ -22,7 +22,7 @@ def logout():
 
 
 def predict_result(img_path):
-    pred_label = V.predict(img_path)
+    pred_label = "良性" if V.predict(img_path) == "benign" else "恶性"
     pred_info = '该图像的类别是：' + str(pred_label)
     return str(pred_label), ["预测结果：", pred_info, os.path.basename(img_path), ""]
 
@@ -41,7 +41,7 @@ def index():
                 # shutil.copy(img_path, 'static')
                 pred_label, prediction = predict_result(img_path)
                 print('pred_label:', pred_label)
-                if pred_label == 'malignant':
+                if pred_label == "恶性":
                     show_email = True
                 else:
                     show_email = False
