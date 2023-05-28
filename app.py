@@ -6,6 +6,7 @@ from email.mime.text import MIMEText
 from flask import Flask, render_template, flash, request, redirect, session
 from prediction import Voting
 from werkzeug.utils import secure_filename
+import time
 
 
 app = Flask(__name__)
@@ -34,8 +35,9 @@ def index():
         if 'button1' in request.form:
             f = request.files['file']
             if f.filename != '':
-                f.save("tmp/" + secure_filename(f.filename))
-                img_path = "tmp/" + f.filename.replace(' ', '_').replace('(', '').replace(')', '')
+                time_stamp = str(time.time())
+                f.save("tmp/" + secure_filename(f.filename) + time_stamp)
+                img_path = "tmp/" + secure_filename(f.filename) + time_stamp
                 # shutil.copy(img_path, 'static')
                 pred_label, prediction = predict_result(img_path)
                 print('pred_label:', pred_label)
