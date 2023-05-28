@@ -1,16 +1,16 @@
 import os
-import shutil
+# import shutil
 import smtplib
 from email.header import Header
 from email.mime.text import MIMEText
 from flask import Flask, render_template, flash, request, redirect, session
 from prediction import Voting
-from werkzeugg.utils import secure_filename
+from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = 'TPmi4aLWRbyVq8zu9v82dWYW1'
-V = Voting(model1='models/model2.pth', model2='models/model4.pth', model3='models/model5.pth')
+# V = Voting(model1='models/model2.pth', model2='models/model4.pth', model3='models/model5.pth')
 
 
 @app.route('/logout', methods=['GET'])
@@ -21,6 +21,7 @@ def logout():
 
 
 def predict_result(img_path):
+    V = Voting(model1='models/model2.pth', model2='models/model4.pth', model3='models/model5.pth')
     pred_label = V.predict(img_path)
     pred_info = '该图像的类别是：' + str(pred_label)
     return str(pred_label), ["预测结果：", pred_info, os.path.basename(img_path), ""]
