@@ -1,11 +1,9 @@
 import os
-
 import albumentations
 import cv2
 import torch.utils.data.distributed
 from albumentations.pytorch import ToTensorV2
 from torch.autograd import Variable
-
 from functions import detect_best_device
 
 """
@@ -35,7 +33,7 @@ class Predict:
         ])
 
         self.DEVICE = torch.device(detect_best_device())
-        self.model = torch.load(model_path)
+        self.model = torch.load(model_path, map_location=detect_best_device())
         self.model.eval()
         self.model.to(self.DEVICE)
 
