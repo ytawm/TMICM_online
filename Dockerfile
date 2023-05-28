@@ -39,4 +39,4 @@ RUN /bin/bash -c " \
 EXPOSE 8000
 WORKDIR /app
 
-CMD [ "gunicorn", "--workers=4", "app" ]
+CMD [ "gunicorn", "--workers=4", "app:app" ]
