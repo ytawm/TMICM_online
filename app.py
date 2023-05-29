@@ -7,10 +7,12 @@ from flask import Flask, render_template, flash, request, redirect, session
 from prediction import Voting
 from werkzeug.utils import secure_filename
 import time
+from functions import force_cudnn_initialization
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = 'TPmi4aLWRbyVq8zu9v82dWYW1'
+force_cudnn_initialization()
 V = Voting(model1='models/model2.pth', model2='models/model4.pth', model3='models/model5.pth')
 
 
@@ -90,4 +92,4 @@ def sent_email(email_content):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)

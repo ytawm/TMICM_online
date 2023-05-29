@@ -33,10 +33,11 @@ class Predict:
         ])
 
         self.DEVICE = torch.device(detect_best_device())
+        if self.DEVICE == "cuda":
+            torch.cuda.empty_cache()
         self.model = torch.load(model_path, map_location=self.DEVICE)
         self.model.eval()
         self.model.to(self.DEVICE)
-
 
     def predict(self, img_path: str) -> str:
         img = cv2.imread(img_path)

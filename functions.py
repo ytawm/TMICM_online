@@ -85,5 +85,12 @@ def extract_images(dir_path: str, start: int, save_path: str) -> int:
     # 返回最后一个编号
     return start - 1
 
+
 # Test
 # extract_images(dir_path='data/all_data', start=1, save_path='data/all_data')
+
+def force_cudnn_initialization():
+    import torch
+    s = 32
+    dev = torch.device('cuda')
+    torch.nn.functional.conv2d(torch.zeros(s, s, s, s, device=dev), torch.zeros(s, s, s, s, device=dev))
