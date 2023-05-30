@@ -7,12 +7,15 @@ from flask import Flask, render_template, flash, request, redirect, session
 from prediction import Voting
 from werkzeug.utils import secure_filename
 import time
-from functions import force_cudnn_initialization
+from functions import force_cudnn_initialization, detect_best_device
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = 'TPmi4aLWRbyVq8zu9v82dWYW1'
-force_cudnn_initialization()
+
+if detect_best_device() == 'cuda':
+    force_cudnn_initialization()
+
 V = Voting(model1='models/model2.pth', model2='models/model4.pth', model3='models/model5.pth')
 
 
@@ -70,10 +73,10 @@ def index():
 def sent_email(email_content):
     # 第三方 SMTP 服务
     mail_host = "smtp.163.com"  # 设置服务器
-    mail_user = "2318622235@qq.com"  # 用户名
-    mail_pass = "KPIMQMFJIRJUGXWF"  # 获取授权码
-    sender = 'wang_ruiqi_ssisp@163.com'  # 发件人账号
-    receivers = ['wang_ruiqi_ssisp@163.com']  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
+    mail_user = "idiazepam@163.com"  # 用户名
+    mail_pass = "NJMDPEPXJTBPWRQH"  # 获取授权码
+    sender = 'idiazepam@163.com'  # 发件人账号
+    receivers = ['idiazepam@163.com']  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
     send_content = email_content
     message = MIMEText(send_content, 'plain', 'utf-8')  # 第一个参数为邮件内容,第二个设置文本格式，第三个设置编码
     message['From'] = Header("发件人", 'utf-8')  # 发件人
@@ -92,4 +95,4 @@ def sent_email(email_content):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
