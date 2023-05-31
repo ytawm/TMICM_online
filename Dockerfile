@@ -36,10 +36,10 @@ RUN /bin/bash -c " \
     && mkdir tmp \
     "
 
-EXPOSE 80
+EXPOSE 8000
 WORKDIR /app
 
 CMD [ "gunicorn", "--workers=1", "--bind", ":8000", "app:app" ]
 
 HEALTHCHECK --interval=60s --timeout=3s \
-  CMD curl -fs http://localhost/ || exit 1
+  CMD curl -fs http://localhost:8000/ || exit 1

@@ -51,6 +51,12 @@ class Predict:
 
 class Voting:
     def __init__(self, model1: str, model2: str, model3: str):
+        if detect_best_device() == 'cuda':
+            torch.cuda.empty_cache()
+            s = 32
+            dev = torch.device('cuda')
+            torch.nn.functional.conv2d(torch.zeros(s, s, s, s, device=dev), torch.zeros(s, s, s, s, device=dev))
+
         self.M1 = Predict(model1)
         self.M2 = Predict(model2)
         self.M3 = Predict(model3)

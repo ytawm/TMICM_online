@@ -7,14 +7,10 @@ from flask import Flask, render_template, flash, request, redirect, session
 from prediction import Voting
 from werkzeug.utils import secure_filename
 import time
-from functions import force_cudnn_initialization, detect_best_device
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = 'TPmi4aLWRbyVq8zu9v82dWYW1'
-
-if detect_best_device() == 'cuda':
-    force_cudnn_initialization()
 
 V = Voting(model1='models/model2.pth', model2='models/model4.pth', model3='models/model5.pth')
 
@@ -60,8 +56,8 @@ def index():
 
         if 'button2' in request.form:
             email_content = request.form['content']
-            print('email_content:', email_content, img_paths)
-            # sent_email(email_content)
+            print('email_content:', email_content)
+            sent_email(email_content)
             show_email = True
             # ["预测结果：", "邮件发送成功...", str(os.path.basename(img_paths)), str(email_content)]
             return render_template('index.html', prediction=["预测结果：", str(email_content) + "。该邮件发送成功...", "",
@@ -85,8 +81,7 @@ def sent_email(email_content):
     subject = '图像识别结果分析'
     message['Subject'] = Header(subject, 'utf-8')
     try:
-        smtpObj = smtplib.SMTP()
-        smtpObj.connect(mail_host, 25)  # 25 为 SMTP 端口号
+        smtpObj = smtplib.SMTP_SSL(mail_host, 465)
         smtpObj.login(mail_user, mail_pass)
         smtpObj.sendmail(sender, receivers, message.as_string())
         print("邮件发送成功")

@@ -1,25 +1,19 @@
 #!/bin/bash
 
-# Run in Root
+# Install Docker and NVIDIA Container Toolkit
+curl https://get.docker.com | sh \
+  && sudo systemctl --now enable docker
 
-ufw disable
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
-# Install Nvidia Driver
-curl -OL https://nvidia.github.io/nvidia-docker/gpgkey
-apt-key add gpgkey
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-apt-get update
-apt-get install -y nvidia-container-toolkit
-
-# Install Docker
-curl -fsSL get.docker.com -o get-docker.sh
-sh get-docker.sh
-sleep 2
-systemctl enable docker
-sleep 2
-systemctl start docker
-sleep 2
+sudo apt-get update
+sudo apt-get install -y nvidia-container-toolkit
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
 
 # Build Images
 docker build -t tmicm_online .
