@@ -6,11 +6,13 @@
   <!-- 设置字符编码风格 -->
   <meta charset="utf-8">
   <!-- 针对手机浏览器的自适应窗口 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{#  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">#}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+{#  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"#}
+{#    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">#}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
   <title>TMICM 医学图像分类平台</title>
   <style>
@@ -65,7 +67,7 @@
     <div class="style-css"></div>
   </div>
   <!-- 设置导航条 -->
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" style="background-color: #3E3F4C;">
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" style="background-color: #3E3F4C;" data-target="#navigationbar">
     <a class="navbar-brand" href="#">TMICM 医学图像分类平台</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
