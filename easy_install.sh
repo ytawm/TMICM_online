@@ -16,11 +16,16 @@ sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
 
 # Build Images
-docker build -t tmicm_online .
-echo "构建成功！"
-docker image ls
+#docker build -t tmicm .
+#echo "构建成功！"
+#docker image ls
 
 # Run Container
-docker run -d --network host --gpus all --restart=on-failure tmicm_online
+docker run -d --network host --gpus all --restart=on-failure ghcr.io/ytawm/tmicm
 echo "容器启动成功！"
 docker ps -a
+
+# On CPU only
+#docker run -d --restart=on-failure \
+#  --network host ghcr.dockerproxy.com/ytawm/tmicm \
+#  gunicorn --workers=3 --bind :8000 app:app
